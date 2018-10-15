@@ -1,10 +1,14 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="utf-8" />
-    <title>Crack-Man</title>
+    <meta charset="UTF-8">
+    <title>SimulationView</title>
 </head>
-<body>
+
+<body style="margin:0px;padding:0px;overflow:hidden;">
+
+
     <script>
         function parseCommand(input = "") {
             return JSON.parse(input);
@@ -64,33 +68,31 @@
                 scene.add(light);
 
 
-                //var shelf = new THREE.Group();
-                //scene.add(shelf)
-                //loadOBJModel("textures/", "shelf.obj", "textures/", "shelf.mtl", (mesh) => {
-                //    mesh.scale.set(.03, .03, .03);
-                //    shelf.add(mesh);
-                //    shelf.position.x = 10;
-                //    shelf.position.y = 3;
-                //});
+                var shelf = new THREE.Group();
+                scene.add(shelf)
+                loadOBJModel("textures/", "shelf.obj", "textures/", "shelf.mtl", (mesh) => {
+                    mesh.scale.set(.03, .03, .03);
+                    shelf.add(mesh);
+                    shelf.position.x = 10;
+                    shelf.position.y = 3;
+                });
 
+                function loadOBJModel(modelPath, modelName, texturePath, textureName, onload) {
+                    new THREE.MTLLoader()
+                        .setPath(texturePath)
+                        .load(textureName, function (materials) {
+                            materials.preload();
 
-            }
-
-            function loadOBJModel(modelPath, modelName, texturePath, textureName, onload) {
-                new THREE.MTLLoader()
-                    .setPath(texturePath)
-                    .load(textureName, function (materials) {
-                        materials.preload();
-
-                        new THREE.OBJLoader()
-                            .setPath(modelPath)
-                            .setMaterials(materials)
-                            .load(modelName, function (object) {
-                                onload(object);
-                            }, function () { }, function (e) { console.log("Error loading model"); console.log(e); });
-                    });
-            }
-
+                            new THREE.OBJLoader()
+                                .setPath(modelPath)
+                                .setMaterials(materials)
+                                .load(modelName, function (object) {
+                                    onload(object);
+                                }, function () { }, function (e) { console.log("Error loading model"); console.log(e); });
+                        });
+                }
+            }   
+            
 
             function onWindowResize() {
                 camera.aspect = window.innerWidth / window.innerHeight;
@@ -107,6 +109,41 @@
             exampleSocket = new WebSocket("ws://" + window.location.hostname + ":" + window.location.port + "/connect_client");
             exampleSocket.onmessage = function (event) {
                 var command = parseCommand(event.data);
+
+                if (command.command == "update") {
+                    if (Object.keys(worldObjects).indexOf(command.parameters.guid) < 0) {
+                        if (command.parameters.type == "robot") {
+                            var geometry = new THREE.BoxGeometry(0.9, 0.3, 0.9);
+                            var cubeMaterials = [
+                                new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/robot_side.png"), side: THREE.DoubleSide }), //LEFT
+                                new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/robot_side.png"), side: THREE.DoubleSide }), //RIGHT
+                                new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/robot_top.png"), side: THREE.DoubleSide }), //TOP
+                                new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/robot_bottom.png"), side: THREE.DoubleSide }), //BOTTOM
+                                new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/robot_front.png"), side: THREE.DoubleSide }), //FRONT
+                                new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/robot_front.png"), side: THREE.DoubleSide }), //BACK
+                            ];
+                            var material = new THREE.MeshFaceMaterial(cubeMaterials);
+                            var robot = new THREE.Mesh(geometry, material);
+                            robot.position.y = 1.15;
+                            robot.position.x = 10;
+                            var robotGroup = new THREE.Group();
+                            robotGroup.add(robot);
+                            scene.add(robotGroup);
+                            worldObjects[command.parameters.guid] = robotGroup;
+
+                        }
+                    }
+
+                    var object = worldObjects[command.parameters.guid];
+
+                    object.position.x = command.parameters.x;
+                    object.position.y = command.parameters.y;
+                    object.position.z = command.parameters.z;
+
+                    object.rotation.x = command.parameters.rotationX;
+                    object.rotation.y = command.parameters.rotationY;
+                    object.rotation.z = command.parameters.rotationZ;
+                }
             }
 
             init();
