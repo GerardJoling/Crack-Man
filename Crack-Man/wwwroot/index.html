@@ -81,25 +81,34 @@
                     mesh.scale.set(.03, .03, .03);
                     cm.add(mesh);
                     cm.position.x = 10;
-                    cm.position.y = 3;
+                    cm.position.y = 0;
                 });
 
-                var xSpeed = 0.1;
-                var ySpeed = 0.1;
+                var xSpeed = 0.2;
+                var zSpeed = 0.2;
 
                 document.addEventListener("keydown", onDocumentKeyDown, false);
                 function onDocumentKeyDown(event) {
                     var keyCode = event.which;
-                    if (keyCode == 87) {
-                        cm.position.y += ySpeed;
+                    if (keyCode == 87) //w
+                    {
+                        cm.position.z += zSpeed;
                         scene.update();
-                    } else if (keyCode == 83) {
-                        cm.position.y -= ySpeed; scene.update();
-                    } else if (keyCode == 65) {
+                    }
+                    else if (keyCode == 83)//s 
+                    {
+                        cm.position.z -= zSpeed; scene.update();
+                    }
+                    else if (keyCode == 65)//a 
+                    {
                         cm.position.x -= xSpeed; scene.update();
-                    } else if (keyCode == 68) {
+                    }
+                    else if (keyCode == 68)//d 
+                    {
                         cm.position.x += xSpeed; scene.update();
-                    } else if (keyCode == 32) {
+                    }
+                    else if (keyCode == 82)//r to reset
+                    {
                         cm.position.set(0, 0, 0); scene.update();
                     }
                 };
