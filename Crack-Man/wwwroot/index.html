@@ -68,13 +68,13 @@
                 scene.add(light);
 
 
-                var shelf = new THREE.Group();
-                scene.add(shelf)
-                loadOBJModel("textures/", "shelf.obj", "textures/", "shelf.mtl", (mesh) => {
+                var cm = new THREE.Group();
+                scene.add(cm)
+                loadOBJModel("textures/", "crackman.obj", "textures/", "crackman.mtl", (mesh) => {
                     mesh.scale.set(.03, .03, .03);
-                    shelf.add(mesh);
-                    shelf.position.x = 10;
-                    shelf.position.y = 3;
+                    cm.add(mesh);
+                    cm.position.x = 10;
+                    cm.position.y = 3;
                 });
 
                 function loadOBJModel(modelPath, modelName, texturePath, textureName, onload) {
