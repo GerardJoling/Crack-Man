@@ -74,6 +74,49 @@
                 var directionalLight = new THREE.DirectionalLight(0xffffff, 0.7);
                 scene.add(directionalLight);
 
+                var walls = new THREE.Group();
+                scene.add(walls)
+                loadOBJModel("textures/", "wall.obj", "textures/", "wall.mtl", (mesh) => {
+                    mesh.scale.set(3, 3, 3);
+                    mesh.position.x = 10;
+                    mesh.position.y = 0.6;
+                    walls.add(mesh);
+                });
+                loadOBJModel("textures/", "wall.obj", "textures/", "wall.mtl", (mesh) => {
+                    mesh.scale.set(3, 3, 3);
+                    mesh.position.x = 14;
+                    mesh.position.y = 0.6;
+                    walls.add(mesh);
+                });
+                loadOBJModel("textures/", "wall.obj", "textures/", "wall.mtl", (mesh) => {
+                    mesh.scale.set(3, 3, 3);
+                    mesh.position.x = 18;
+                    mesh.position.y = 0.6;
+
+                    walls.add(mesh);
+                });
+                loadOBJModel("textures/", "wall.obj", "textures/", "wall.mtl", (mesh) => {
+                    mesh.scale.set(3, 3, 3);
+                    mesh.position.x = 10;
+                    mesh.position.y = 0.6;
+                    mesh.position.z = 3;
+                    walls.add(mesh);
+                });
+                loadOBJModel("textures/", "wall.obj", "textures/", "wall.mtl", (mesh) => {
+                    mesh.scale.set(3, 3, 3);
+                    mesh.position.x = 14;
+                    mesh.position.y = 0.6;
+                    mesh.position.z = 3;
+                    walls.add(mesh);
+                });
+                loadOBJModel("textures/", "wall.obj", "textures/", "wall.mtl", (mesh) => {
+                    mesh.scale.set(3, 3, 3);
+                    mesh.position.x = 18;
+                    mesh.position.y = 0.6;
+                    mesh.position.z = 3;
+                    walls.add(mesh);
+                });
+
 
                 var cm = new THREE.Group();
                 scene.add(cm)
@@ -84,6 +127,9 @@
                     cm.position.y = 0;
                 });
 
+
+                
+
                 var xSpeed = 0.2;
                 var zSpeed = 0.2;
 
@@ -92,24 +138,32 @@
                     var keyCode = event.which;
                     if (keyCode == 87) //w
                     {
+                        cm.rotation.y = (Math.PI / 180) * 180;
+                        cm.position.z -= zSpeed;
+                        scene.update();
+                    }
+                    else if (keyCode == 83)//s
+                    {
+                        cm.rotation.y = (Math.PI / 180) * 0;
                         cm.position.z += zSpeed;
                         scene.update();
                     }
-                    else if (keyCode == 83)//s 
+                    else if (keyCode == 65)//a
                     {
-                        cm.position.z -= zSpeed; scene.update();
+                        cm.rotation.y = (Math.PI / 180) * 270;
+                        cm.position.x -= xSpeed;
+                        scene.update();
                     }
-                    else if (keyCode == 65)//a 
+                    else if (keyCode == 68)//d
                     {
-                        cm.position.x -= xSpeed; scene.update();
-                    }
-                    else if (keyCode == 68)//d 
-                    {
-                        cm.position.x += xSpeed; scene.update();
+                        cm.rotation.y = (Math.PI / 180) * 90;
+                        cm.position.x += xSpeed;
+                        scene.update();
                     }
                     else if (keyCode == 82)//r to reset
                     {
-                        cm.position.set(0, 0, 0); scene.update();
+                        cm.position.set(0, 0, 0);
+                        scene.update();
                     }
                 };
 
@@ -127,8 +181,8 @@
                                 }, function () { }, function (e) { console.log("Error loading model"); console.log(e); });
                         });
                 }
-            }   
-            
+            }
+
 
             function onWindowResize() {
                 camera.aspect = window.innerWidth / window.innerHeight;
@@ -182,7 +236,7 @@
                 }
             }
 
-            
+
             init();
             animate();
         }
