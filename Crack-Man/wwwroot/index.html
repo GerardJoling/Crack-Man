@@ -23,6 +23,7 @@
             var cameraControls;
             var cm;
             var cm2;
+            var collision;
             var speed;
             var collidableMeshList = [];
             var worldObjects = {};
@@ -32,13 +33,18 @@
 
             //functions
             function init() {
-                camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
-                cameraControls = new THREE.OrbitControls(camera);
-                camera.position.z = 15;
-                camera.position.y = 5;
-                camera.position.x = 15;
-                cameraControls.update();
+
                 scene = new THREE.Scene();
+
+                camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 1, 1000);
+                camera.lookAt(50, 0, 50);
+                cameraControls = new THREE.OrbitControls(camera);
+                camera.position.z = 0;
+                camera.position.y = 40;
+                camera.position.x = 50;
+                
+                cameraControls.update();
+               
 
                 renderer = new THREE.WebGLRenderer({ antialias: true });
                 renderer.setPixelRatio(window.devicePixelRatio);
@@ -51,8 +57,8 @@
                 var material = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/concrete_texture.jpg"), side: THREE.DoubleSide });
                 var plane = new THREE.Mesh(geometry, material);
                 plane.rotation.x = Math.PI / 2.0;
-                plane.position.x = 15;
-                plane.position.z = 15;
+                plane.position.x = 50;
+                plane.position.z = 50;
                 scene.add(plane);
 
                 //generating skybox
@@ -79,7 +85,7 @@
                 scene.add(directionalLight);
 
                 //walls
-                var wallGeometry = new THREE.CubeGeometry(30, 1.5, 0.75, 0, 0, 0);
+                var wallGeometry = new THREE.CubeGeometry(30, 1.5, 0.75, 1, 1, 1);
                 var wallMaterial = new THREE.MeshBasicMaterial({ color: 0x003366 });
                 var wall = new THREE.Mesh(wallGeometry, wallMaterial);
                 wall.position.set(15, 0.5, -10.15);
@@ -89,24 +95,29 @@
                 wall2.position.set(15, 0.5, -13.85);
                 scene.add(wall2);
                 collidableMeshList.push(wall2);
+                var wall3 = new THREE.Mesh(wallGeometry, wallMaterial);
+                wall3.position.set(10, 0.5, -13.85);
+                wall3.rotation.y = (Math.PI / 180) * 90;
+                scene.add(wall3);
+                collidableMeshList.push(wall3);
 
                  //crackman
                 loadOBJModel("textures/", "crackman.obj", "textures/", "crackman.mtl", (mesh) => {
 
                     cm2 = mesh;
                     cm2.scale.set(.04, .04, .04);
-                    cm2.position.x = 1;
+                    cm2.position.x = 50;
                     cm2.position.y = 0;
-                    cm2.position.z = -12;
+                    cm2.position.z = 50;
                     scene.add(cm2)
                 });
 
 
                 //CRACKMAN HITBOX
-                var cubeGeometry = new THREE.CubeGeometry(2.8, 2, 2.8, 0, 0, 0);
+                var cubeGeometry = new THREE.CubeGeometry(2.8, 2.8, 2.8, 1, 1, 1);
                 var wireMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, transparent:true, opacity: 0 });
                 cm = new THREE.Mesh(cubeGeometry, wireMaterial);
-                cm.position.set(1, 1, -12);
+                cm.position.set(50, 1, 50);
                 scene.add(cm);
             }
 
@@ -139,7 +150,7 @@
             }
 
             function update() {
-
+                
                  speed = 0.20;
                 var map = {};
                 onkeydown = onkeyup = function (e) {
@@ -148,36 +159,36 @@
 
                     if (map[87]) //w
                     {
-                        cm.rotation.y = (Math.PI / 180) * 180;
-                        cm.position.z -= speed;
-                        cm2.rotation.y = (Math.PI / 180) * 180;
-                        cm2.position.z -= speed;
-                    }
-                  else  if (map[83])//s
-                    {
                         cm.rotation.y = (Math.PI / 180) * 0;
                         cm.position.z += speed;
                         cm2.rotation.y = (Math.PI / 180) * 0;
                         cm2.position.z += speed;
                     }
-                   else if (map[65])//a
+                  else  if (map[83])//s
                     {
-                        cm.rotation.y = (Math.PI / 180) * 270;
-                        cm.position.x -= speed;
-                        cm2.rotation.y = (Math.PI / 180) * 270;
-                        cm2.position.x -= speed;
+                        cm.rotation.y = (Math.PI / 180) * 180;
+                        cm.position.z -= speed;
+                        cm2.rotation.y = (Math.PI / 180) * 180;
+                        cm2.position.z -= speed;
                     }
-                  else  if (map[68])//d
+                   else if (map[65])//a
                     {
                         cm.rotation.y = (Math.PI / 180) * 90;
                         cm.position.x += speed;
                         cm2.rotation.y = (Math.PI / 180) * 90;
                         cm2.position.x += speed;
                     }
+                  else  if (map[68])//d
+                    {
+                        cm.rotation.y = (Math.PI / 180) * 270;
+                        cm.position.x -= speed;
+                        cm2.rotation.y = (Math.PI / 180) * 270;
+                        cm2.position.x -= speed;
+                    }
                     if (map[82])//r to reset
                     {
-                        cm.position.set(1, 1, -12);
-                        cm2.position.set(1, 0, -12);
+                        cm.position.set(50, 1, 50);
+                        cm2.position.set(50,0, 50);
                     }
                     
                 }
@@ -193,12 +204,18 @@
                     var collisionResults = ray.intersectObjects(collidableMeshList);
                     if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length()) //collision detected
                     {
-                        if (cm.rotation.y == (Math.PI / 180) * 0) { cm.position.z -= speed/2; }
-                        else if (cm.rotation.y == (Math.PI / 180) * 90) { cm.position.x -= speed/2; }
-                        else if (cm.rotation.y == (Math.PI / 180) * 180) { cm.position.z += speed/2; }
-                        else if (cm.rotation.y == (Math.PI / 180) * 270) { cm.position.x += speed/2; }
+                        collision = true;  
                     }
                 }
+
+                if (collision == true) {
+                    if (cm.rotation.y == (Math.PI / 180) * 0) { cm.position.z += speed; }
+                    else if (cm.rotation.y == (Math.PI / 180) * 90) { cm.position.x += speed; }
+                    else if (cm.rotation.y == (Math.PI / 180) * 180) { cm.position.z -= speed; }
+                    else if (cm.rotation.y == (Math.PI / 180) * 270) { cm.position.x -= speed; }
+                    collision = false;
+                }
+                
                 cameraControls.update();
                 cm2.position.x = cm.position.x;
                 cm2.position.z = cm.position.z;
@@ -206,6 +223,8 @@
             }
 
             function render() {
+                
+                camera.lookAt(cm.position);
                 renderer.render(scene, camera);
             }
 
