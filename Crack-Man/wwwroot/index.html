@@ -85,25 +85,27 @@
                 scene.add(wall);
                 collidableMeshList.push(wall);
                 var wall2 = new THREE.Mesh(wallGeometry, wallMaterial);
-                wall2.position.set(15, 0.5, -12.2);
+                wall2.position.set(15, 0.5, -14);
                 scene.add(wall2);
                 collidableMeshList.push(wall2);
 
-                //crackman
-                //loadOBJModel("textures/", "crackman.obj", "textures/", "crackman.mtl", (mesh) => {
-                //    mesh.scale.set(.03, .03, .03);
-                //    cm = mesh;
-                //    cm.position.x = 10;
-                //    cm.position.y = 0;
-                //    cm.position.z = 1.5;
-                //    scene.add(cm)
-                //});
+                 //crackman
+                loadOBJModel("textures/", "crackman.obj", "textures/", "crackman.mtl", (mesh) => {
+
+                    cm2 = mesh;
+                    cm2.scale.set(.03, .03, .03);
+                    cm2.position.x = 10;
+                    cm2.position.y = 0;
+                    cm2.position.z = 1.5;
+                    scene.add(cm2)
+                });
+
 
                 //CRACKMAN PLACEHOLDER
-                var cubeGeometry = new THREE.CubeGeometry(1, 1, 1, 1, 1, 1);
-                var wireMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000});
+                var cubeGeometry = new THREE.CubeGeometry(2, 2, 2, 1, 1, 1);
+                var wireMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, transparent:true, opacity: 0 });
                 cm = new THREE.Mesh(cubeGeometry, wireMaterial);
-                cm.position.set(9, 0.5, -11.1);
+                cm.position.set(10, 0, 1.5);
                 scene.add(cm);
             }
 
@@ -136,7 +138,7 @@
             }
 
             function update() {
-            
+
                 var Speed = 0.2;
                 var map = {};
                 onkeydown = onkeyup = function (e) {
@@ -147,26 +149,36 @@
                     {
                         cm.rotation.y = (Math.PI / 180) * 180;
                         cm.position.z -= Speed;
+                        cm2.rotation.y = (Math.PI / 180) * 180;
+                        cm2.position.z -= Speed;
                     }
-                     if (map[83])//s
+                    if (map[83])//s
                     {
                         cm.rotation.y = (Math.PI / 180) * 0;
                         cm.position.z += Speed;
+                        cm2.rotation.y = (Math.PI / 180) * 0;
+                        cm2.position.z += Speed;
                     }
-                     if (map[65])//a
+                    if (map[65])//a
                     {
                         cm.rotation.y = (Math.PI / 180) * 270;
                         cm.position.x -= Speed;
+                        cm2.rotation.y = (Math.PI / 180) * 270;
+                        cm2.position.x -= Speed;
                     }
-                     if (map[68])//d
+                    if (map[68])//d
                     {
                         cm.rotation.y = (Math.PI / 180) * 90;
                         cm.position.x += Speed;
+                        cm2.rotation.y = (Math.PI / 180) * 90;
+                        cm2.position.x += Speed;
                     }
-                     if (map[82])//r to reset
+                    if (map[82])//r to reset
                     {
                         cm.position.set(9, 0.5, -11.1);
+                        cm2.position.set(9, 0.5, -11.1);
                     }
+                    
                 }
 
                 //collision check
@@ -180,13 +192,15 @@
                     var collisionResults = ray.intersectObjects(collidableMeshList);
                     if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length()) //collision detected
                     {
-                        if (cm.rotation.y == (Math.PI / 180) * 0) { cm.position.z -= 0.05; }
-                        else if (cm.rotation.y == (Math.PI / 180) * 90) { cm.position.x -= 0.05; }
-                        else if (cm.rotation.y == (Math.PI / 180) * 180) { cm.position.z += 0.05; }
-                        else if (cm.rotation.y == (Math.PI / 180) * 270) { cm.position.x += 0.05; }
+                        if (cm.rotation.y == (Math.PI / 180) * 0) { cm.position.z -= Speed; }
+                        else if (cm.rotation.y == (Math.PI / 180) * 90) { cm.position.x -= Speed; }
+                        else if (cm.rotation.y == (Math.PI / 180) * 180) { cm.position.z += Speed; }
+                        else if (cm.rotation.y == (Math.PI / 180) * 270) { cm.position.x += Speed; }
                     }
                 }
                 cameraControls.update();
+                cm2.position.x = cm.position.x;
+                cm2.position.z = cm.position.z;
             }
 
             function render() {
