@@ -70,7 +70,7 @@
 
                 var cm = new THREE.Group();
                 scene.add(cm)
-                loadOBJModel("textures/", "crackman.obj", "textures/", "crackman.mtl", (mesh) => {
+                loadOBJModel("models/", "crackman.obj", "models/", "crackman.mtl", (mesh) => {
                     mesh.scale.set(.03, .03, .03);
                     cm.add(mesh);
                     cm.position.x = 10;
