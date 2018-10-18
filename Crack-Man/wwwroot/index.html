@@ -23,10 +23,6 @@
             var camera, scene, renderer;
             var cameraControls;
             var cm;
-            var cmmodel;
-            var collision;
-            var cameratype;
-            var speed;
             var collidableMeshList = [];
             var worldObjects = {};
             var m = 1;
@@ -53,6 +49,7 @@
             var z;
             let health = document.getElementById("health");
 
+
             init();
             animate();
 
@@ -69,7 +66,7 @@
                 cameratype = 1;
                 camera.lookAt(50, 0, 50);
                 cameraControls.update();
-                speed = 0.20;
+                scene = new THREE.Scene();
 
                 renderer = new THREE.WebGLRenderer({ antialias: true });
                 renderer.setPixelRatio(window.devicePixelRatio);
@@ -109,12 +106,12 @@
                 var directionalLight = new THREE.DirectionalLight(0xffffff, 0.7);
                 scene.add(directionalLight);
 
-                //walls
-                var wallGeometry = new THREE.CubeGeometry(30, 1.5, 0.75, 1, 1, 1);
-                var wallMaterial = new THREE.MeshBasicMaterial({ color: 0x003366 });
+                //wall
+                var wallGeometry = new THREE.CubeGeometry(30, 1, 1, 1, 1, 1);
+                var wallMaterial = new THREE.MeshBasicMaterial({ color: 0x8888ff });
+
                 var wall = new THREE.Mesh(wallGeometry, wallMaterial);
-                wall.position.set(50, 0.5, 30);
-                wall.rotation.y = (Math.PI / 180) * 90;
+                wall.position.set(15, 0.5, -10);
                 scene.add(wall);
                 collidableMeshList.push(wall);
 
@@ -124,15 +121,7 @@
                 scene.add(wall2);
                 collidableMeshList.push(wall2);
 
-                var wall3 = new THREE.Mesh(wallGeometry, wallMaterial);
-                wall3.position.set(50, 0.5, 50);
-                wall3.rotation.y = (Math.PI / 180) * 180;
-                scene.add(wall3);
-                collidableMeshList.push(wall3);
-
-
-
-                //crackman model
+                 //crackman
                 loadOBJModel("textures/", "crackman.obj", "textures/", "crackman.mtl", (mesh) => {
 
                     cmmodel = mesh;
@@ -143,33 +132,31 @@
                     scene.add(cmmodel)
                 });
 
-                //CRACKMAN HITBOX
-                var cubeGeometry = new THREE.CubeGeometry(2.8, 2.8, 2.8, 1, 1, 1);
-                var wireMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, transparent: true, opacity: 0 });
+
+                //CRACKMAN PLACEHOLDER
+                var cubeGeometry = new THREE.CubeGeometry(2, 2, 2, 1, 1, 1);
+                var wireMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, transparent:true, opacity: 0 });
                 cm = new THREE.Mesh(cubeGeometry, wireMaterial);
-                cm.position.set(48, 1, 10);
+                cm.position.set(10, 0, 1.5);
                 scene.add(cm);
-                pickupspawn();
-
             }
-            function pickupspawn() {
-                for (i = 0; i < pills.length; i++) {
-                    loadOBJModel("models/", "pill.obj", "models/", "pill.mtl", (mesh) => {
-                        pills[i] = mesh;
-                        pills[i].scale.set(.003, .003, .003);
-                        scene.add(pills[i]);
-                        pills[i].position.x = p;
-                        pills[i].position.y = 0.6;
-                        pills[i].position.z = 20.1;
-                        p = p + 2;
+
+            //object loader
+            function loadOBJModel(modelPath, modelName, texturePath, textureName, onload) {
+                new THREE.MTLLoader()
+                    .setPath(texturePath)
+                    .load(textureName, function (materials) {
+                        materials.preload();
+
+                        new THREE.OBJLoader()
+                            .setPath(modelPath)
+                            .setMaterials(materials)
+                            .load(modelName, function (object) {
+                                onload(object);
+                            }, function () { }, function (e) { console.log("Error loading model"); console.log(e); });
                     });
-                }
             }
 
-            function gethit() {
-
-                health.value -= 20;
-            }
             function onWindowResize() {
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
@@ -186,7 +173,7 @@
                 a.rotation.x = a.rotation.x + 0.01;
             }
 
-            function update() {
+                var Speed = 0.2;
                 var map = {};
                 document.getElementById("Points").innerHTML = pointss + " Points";
                 if (health.value < 1) {
@@ -200,40 +187,24 @@
 
                     if (map[87]) //w
                     {
-                        cm.rotation.y = (Math.PI / 180) * 0;
-                        cm.position.z += speed;
-                        cmmodel.rotation.y = (Math.PI / 180) * 0;
-                        cmmodel.position.z += speed;
-                    }
-                    else if (map[83])//s
-                    {
                         cm.rotation.y = (Math.PI / 180) * 180;
-                        cm.position.z -= speed;
-                        cmmodel.rotation.y = (Math.PI / 180) * 180;
-                        cmmodel.position.z -= speed;
+                        cm.position.z -= Speed;
+                        cm2.rotation.y = (Math.PI / 180) * 180;
+                        cm2.position.z -= Speed;
                     }
-                    else if (map[65])//a
+                    if (map[83])//s
                     {
-                        cm.rotation.y = (Math.PI / 180) * 90;
-                        cm.position.x += speed;
-                        cmmodel.rotation.y = (Math.PI / 180) * 90;
-                        cmmodel.position.x += speed;
+                        cm.rotation.y = (Math.PI / 180) * 0;
+                        cm.position.z += Speed;
+                        cm2.rotation.y = (Math.PI / 180) * 0;
+                        cm2.position.z += Speed;
                     }
-                    else if (map[68])//d
+                    if (map[65])//a
                     {
                         cm.rotation.y = (Math.PI / 180) * 270;
-                        cm.position.x -= speed;
-                        cmmodel.rotation.y = (Math.PI / 180) * 270;
-                        cmmodel.position.x -= speed;
-                    }
-                    if (map[82])//R to reset
-                    {
-                        reset();
-                    }
-                    if (map[32])//SPACEBAR to switch between cameras
-                    {
-                        cameratype += 1;
-                        if (cameratype == 4) { cameratype = 1; }
+                        cm.position.x -= Speed;
+                        cm2.rotation.y = (Math.PI / 180) * 270;
+                        cm2.position.x -= Speed;
                     }
                     if (map[188] && speed >= 0.4) // < to go slower
                     {
@@ -245,7 +216,7 @@
                     }
                 }
 
-                //collision check of crackman with the meshes in collidableMeshList
+                //collision check
                 var originPoint = cm.position.clone();
                 for (var vertexIndex = 0; vertexIndex < cm.geometry.vertices.length; vertexIndex++) {
                     var localVertex = cm.geometry.vertices[vertexIndex].clone();
@@ -256,91 +227,22 @@
                     var collisionResults = ray.intersectObjects(collidableMeshList);
                     if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length()) //collision detected
                     {
-                        collision = true;
+                        if (cm.rotation.y == (Math.PI / 180) * 0) { cm.position.z -= Speed; }
+                        else if (cm.rotation.y == (Math.PI / 180) * 90) { cm.position.x -= Speed; }
+                        else if (cm.rotation.y == (Math.PI / 180) * 180) { cm.position.z += Speed; }
+                        else if (cm.rotation.y == (Math.PI / 180) * 270) { cm.position.x += Speed; }
                     }
-                }
-
-                //if there is collision, move crackman 1 step back opposite to the direction he's facing
-                if (collision == true) {
-
-                    if (cm.rotation.y == (Math.PI / 180) * 0) {
-                        cm.position.z -= speed;
-                        gethit();
-                    }
-                    else if (cm.rotation.y == (Math.PI / 180) * 90) {
-                        cm.position.x -= speed;
-                        gethit();
-                    }
-                    else if (cm.rotation.y == (Math.PI / 180) * 180) {
-                        cm.position.z += speed;
-                        gethit();
-                    }
-                    else if (cm.rotation.y == (Math.PI / 180) * 270) {
-                        cm.position.x += speed;
-                        gethit();
-                    }
-                    collision = false;
-                }
-
-                //dont fall off the map
-                if (cm.position.x > 101 || cm.position.x < 0) {
-                    reset();
-                }
-                if (cm.position.z > 101 || cm.position.z < 0) {
-                    reset();
                 }
 
                 cameraControls.update();
-
-                //make crackman follow its hitbox
-                cmmodel.position.x = cm.position.x;
-                cmmodel.position.z = cm.position.z;
+                cm2.position.x = cm.position.x;
+                cm2.position.z = cm.position.z;
             }
 
             //render the scene and camera
             function render() {
                 cameras();
                 renderer.render(scene, camera);
-            }
-
-            //reset crackman and the camera
-            function reset() {
-                cm.position.set(48, 1, 10);
-                cmmodel.position.set(48, 0, 10);
-                camera.position.z = -10;
-                camera.position.y = 20;
-                camera.position.x = 50;
-                pointss = 0;
-            }
-            //switches between cameras
-            function cameras() {
-
-                if (cameratype == 1) { //free camera
-                    camera.lookAt(50, 0, 50);
-                }
-                else if (cameratype == 2) { //3rd person camera
-                    camera.lookAt(cm.position);
-                    camera.position.z = cm.position.z - 10;
-                    camera.position.y = cm.position.y + 10;
-                    camera.position.x = cm.position.x;
-                }
-                else if (cameratype == 3) {  //1st person camera
-                    camera.position.z = cm.position.z;
-                    camera.position.y = cm.position.y;
-                    camera.position.x = cm.position.x;
-                    if (cm.rotation.y == (Math.PI / 180) * 0) {
-                        camera.lookAt(cm.position.x, cm.position.y, cm.position.z + 3);
-                    }
-                    else if (cm.rotation.y == (Math.PI / 180) * 90) {
-                        camera.lookAt(cm.position.x + 3, cm.position.y, cm.position.z);
-                    }
-                    else if (cm.rotation.y == (Math.PI / 180) * 180) {
-                        camera.lookAt(cm.position.x, cm.position.y, cm.position.z - 3);
-                    }
-                    else if (cm.rotation.y == (Math.PI / 180) * 270) {
-                        camera.lookAt(cm.position.x - 3, cm.position.y, cm.position.z);
-                    }
-                }
             }
 
             //object loader
