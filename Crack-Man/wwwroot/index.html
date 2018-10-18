@@ -19,17 +19,20 @@
         window.onload = function () {
 
             //variables
+            var worldObjects = {};
             var camera, scene, renderer;
             var cameraControls;
             var cmbox;
             var cmmodel;
-            var collision;
             var cameratype;
             var speed;
             var move;
-            var collidableMeshList = [];
-            var worldObjects = {};
-
+            var collidableWallList = [];
+            var wallCollision;
+            var collidablePillList = [];
+            var pillCollision;
+            var collidableEnemyList = [];
+            var enemyCollision;
             var pointss = 0;
             var m = 1;
             var pills = [];
@@ -64,11 +67,11 @@
                 scene = new THREE.Scene();
                 camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
                 cameraControls = new THREE.OrbitControls(camera);
-                camera.position.z = -10;
-                camera.position.y = 20;
+                camera.position.z = -20;
+                camera.position.y = 40;
                 camera.position.x = 50;
                 cameratype = 1;
-                camera.lookAt(50, 0, 50);
+                camera.lookAt(50, 0, 37.5);
                 cameraControls.update();
                 speed = 0.1;
                 move = 'stop';
@@ -80,12 +83,12 @@
                 window.addEventListener('resize', onWindowResize, false);
 
                 //generating plane
-                var geometry = new THREE.PlaneGeometry(160, 120, 32);
+                var geometry = new THREE.PlaneGeometry(100, 75, 32);
                 var material = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/platje.png"), side: THREE.DoubleSide });
                 var plane = new THREE.Mesh(geometry, material);
                 plane.rotation.x = Math.PI / 2.0;
                 plane.position.x = 50;
-                plane.position.z = 50;
+                plane.position.z = 37.5;
                 scene.add(plane);
 
                 //generating skybox
@@ -103,15 +106,15 @@
                 var skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
                 scene.add(skybox);
 
-                // soft white light
+                //soft white light
                 var light = new THREE.AmbientLight(0x404040);
                 scene.add(light);
 
-                // White directional light at 70% intensity shining from the top.
+                //White directional light at 70% intensity shining from the top.
                 var directionalLight = new THREE.DirectionalLight(0xffffff, 0.7);
                 scene.add(directionalLight);
 
-                //walls     x,   y,  z , length, angle
+                //walls     x,  y,  z , length, angle
                 createWall(50.4, 0.8, 30, 30, 90);
                 createWall(42.4, 0.8, 30, 30, 90);
                 createWall(48.2, 0.8, 52, 30, 180);
@@ -135,6 +138,8 @@
                 cmbox = new THREE.Mesh(cubeGeometry, wireMaterial);
                 cmbox.position.set(48, 0.6, 10);
                 scene.add(cmbox);
+
+                //spawn pickups
                 pickupspawn();
             }
 
@@ -146,7 +151,7 @@
                 wall.position.set(setx, sety, setz);
                 wall.rotation.y = ((Math.PI / 180) * rotation);
                 scene.add(wall);
-                collidableMeshList.push(wall);
+                collidableWallList.push(wall);
             }
             //generate pickups
             function pickupspawn() {
@@ -162,7 +167,7 @@
                     });
                 }
             }
-            // simulate healthbar
+            //lower hp when hit
             function gethit() {
                 health.value -= 2;
             }
@@ -176,7 +181,7 @@
                 camera.updateProjectionMatrix();
                 renderer.setSize(window.innerWidth, window.innerHeight);
             }
-            //animates
+            //animates stuff
             function animate() {
                 requestAnimationFrame(animate);
                 render();
@@ -250,23 +255,34 @@
                     cmbox.rotation.y = (Math.PI / 180) * 270;
                 }
 
-                //collision check of crackman with the meshes in collidableMeshList
+                //collision check cmbox with the meshes in collidable lists
                 var originPoint = cmbox.position.clone();
                 for (var vertexIndex = 0; vertexIndex < cmbox.geometry.vertices.length; vertexIndex++) {
                     var localVertex = cmbox.geometry.vertices[vertexIndex].clone();
                     var globalVertex = localVertex.applyMatrix4(cmbox.matrix);
                     var directionVector = globalVertex.sub(cmbox.position);
-
                     var ray = new THREE.Raycaster(originPoint, directionVector.clone().normalize());
-                    var collisionResults = ray.intersectObjects(collidableMeshList);
-                    if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length()) //collision detected
+
+                    var wallCollisionResults = ray.intersectObjects(collidableWallList);
+                    var pillCollisionResults = ray.intersectObjects(collidablePillList);
+                    var enemyCollisionResults = ray.intersectObjects(collidableEnemyList);
+
+                    if (wallCollisionResults.length > 0 && wallCollisionResults[0].distance < directionVector.length()) //collision detected with wall
                     {
-                        collision = true;
+                        wallCollision = true;
+                    }
+                    if (pillCollisionResults.length > 0 && pillCollisionResults[0].distance < directionVector.length()) //collision detected with pill
+                    {
+                        pillCollision = true;
+                    }
+                    if (enemyCollisionResults.length > 0 && enemyCollisionResults[0].distance < directionVector.length()) //collision detected with enemy
+                    {
+                        enemyCollision = true;
                     }
                 }
 
-                //if there is collision, move crackman 1 step back opposite to the direction he's facing and stop moving in that direction
-                if (collision == true) {
+                //if there is collision with walls, move crackman 1 step back opposite to the direction he's facing and stop moving in that direction
+                if (wallCollision == true) {
 
                     if (cmbox.rotation.y == (Math.PI / 180) * 0) { //w
                         cmbox.position.z -= speed;
@@ -288,7 +304,7 @@
                         move = 'stop';
                         gethit();
                     }
-                    collision = false;
+                    wallCollision = false;
                 }
 
                 //dont fall off the map
@@ -317,8 +333,8 @@
             function reset() {
                 cmbox.position.set(48, 0.6, 10);
                 cmmodel.position.set(48, 0, 10);
-                camera.position.z = -10;
-                camera.position.y = 20;
+                camera.position.z = -20;
+                camera.position.y = 40;
                 camera.position.x = 50;
                 cameratype = 1;
                 speed = 0.1;
@@ -329,7 +345,7 @@
             function cameras() {
 
                 if (cameratype == 1) { //free camera
-                    camera.lookAt(50, 0, 50);
+                    camera.lookAt(50, 0, 37.5);
                 }
                 else if (cameratype == 2) { //3rd person camera
                     camera.lookAt(cmbox.position);
