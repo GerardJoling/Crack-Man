@@ -21,13 +21,14 @@
             //variables
             var camera, scene, renderer;
             var cameraControls;
-            var cm;
+            var cmbox;
             var cmmodel;
             var collision;
             var cameratype;
             var speed;
             var collidableMeshList = [];
             var worldObjects = {};
+
 
             init();
             animate();
@@ -45,7 +46,7 @@
                 cameratype = 1;
                 camera.lookAt(50, 0, 50);
                 cameraControls.update();
-                speed = 0.20;
+                speed = 0.2;
 
                 renderer = new THREE.WebGLRenderer({ antialias: true });
                 renderer.setPixelRatio(window.devicePixelRatio);
@@ -86,10 +87,10 @@
                 scene.add(directionalLight);
 
                 //walls
-                var wallGeometry = new THREE.CubeGeometry(30, 1.5, 0.75, 1, 1, 1);
+                var wallGeometry = new THREE.CubeGeometry(30, 1.5, 0.75, 0, 0, 0);
                 var wallMaterial = new THREE.MeshBasicMaterial({ color: 0x003366 });
                 var wall = new THREE.Mesh(wallGeometry, wallMaterial);
-                wall.position.set(50, 0.5, 30);
+                wall.position.set(49.8, 0.5, 30);
                 wall.rotation.y = (Math.PI / 180) * 90;
                 scene.add(wall);
                 collidableMeshList.push(wall);
@@ -118,11 +119,11 @@
                 });
 
                 //CRACKMAN HITBOX
-                var cubeGeometry = new THREE.CubeGeometry(2.8, 2.8, 2.8, 1, 1, 1);
+                var cubeGeometry = new THREE.CubeGeometry(2.8, 2.8, 2.8, 0, 0, 0);
                 var wireMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, transparent: true, opacity: 0 });
-                cm = new THREE.Mesh(cubeGeometry, wireMaterial);
-                cm.position.set(48, 1, 10);
-                scene.add(cm);
+                cmbox = new THREE.Mesh(cubeGeometry, wireMaterial);
+                cmbox.position.set(48, 1, 10);
+                scene.add(cmbox);
             }
 
             function onWindowResize() {
@@ -147,29 +148,29 @@
 
                     if (map[87]) //w
                     {
-                        cm.rotation.y = (Math.PI / 180) * 0;
-                        cm.position.z += speed;
+                        cmbox.rotation.y = (Math.PI / 180) * 0;
+                        cmbox.position.z += speed;
                         cmmodel.rotation.y = (Math.PI / 180) * 0;
                         cmmodel.position.z += speed;
                     }
                     else if (map[83])//s
                     {
-                        cm.rotation.y = (Math.PI / 180) * 180;
-                        cm.position.z -= speed;
+                        cmbox.rotation.y = (Math.PI / 180) * 180;
+                        cmbox.position.z -= speed;
                         cmmodel.rotation.y = (Math.PI / 180) * 180;
                         cmmodel.position.z -= speed;
                     }
                     else if (map[65])//a
                     {
-                        cm.rotation.y = (Math.PI / 180) * 90;
-                        cm.position.x += speed;
+                        cmbox.rotation.y = (Math.PI / 180) * 90;
+                        cmbox.position.x += speed;
                         cmmodel.rotation.y = (Math.PI / 180) * 90;
                         cmmodel.position.x += speed;
                     }
                     else if (map[68])//d
                     {
-                        cm.rotation.y = (Math.PI / 180) * 270;
-                        cm.position.x -= speed;
+                        cmbox.rotation.y = (Math.PI / 180) * 270;
+                        cmbox.position.x -= speed;
                         cmmodel.rotation.y = (Math.PI / 180) * 270;
                         cmmodel.position.x -= speed;
                     }
@@ -193,11 +194,11 @@
                 }
 
                 //collision check of crackman with the meshes in collidableMeshList
-                var originPoint = cm.position.clone();
-                for (var vertexIndex = 0; vertexIndex < cm.geometry.vertices.length; vertexIndex++) {
-                    var localVertex = cm.geometry.vertices[vertexIndex].clone();
-                    var globalVertex = localVertex.applyMatrix4(cm.matrix);
-                    var directionVector = globalVertex.sub(cm.position);
+                var originPoint = cmbox.position.clone();
+                for (var vertexIndex = 0; vertexIndex < cmbox.geometry.vertices.length; vertexIndex++) {
+                    var localVertex = cmbox.geometry.vertices[vertexIndex].clone();
+                    var globalVertex = localVertex.applyMatrix4(cmbox.matrix);
+                    var directionVector = globalVertex.sub(cmbox.position);
 
                     var ray = new THREE.Raycaster(originPoint, directionVector.clone().normalize());
                     var collisionResults = ray.intersectObjects(collidableMeshList);
@@ -210,34 +211,38 @@
                 //if there is collision, move crackman 1 step back opposite to the direction he's facing
                 if (collision == true) {
 
-                    if (cm.rotation.y == (Math.PI / 180) * 0) {
-                        cm.position.z -= speed;
+                    if (cmbox.rotation.y == (Math.PI / 180) * 0) { //w
+                        cmbox.position.z -= speed;
+                        cmmodel.position.z-=speed;
                     }
-                    else if (cm.rotation.y == (Math.PI / 180) * 90) {
-                        cm.position.x -= speed;
+                    else if (cmbox.rotation.y == (Math.PI / 180) * 90) { //a
+                        cmbox.position.x -= speed;
+                        cmmodel.position.x -= speed;
                     }
-                    else if (cm.rotation.y == (Math.PI / 180) * 180) {
-                        cm.position.z += speed;
+                    else if (cmbox.rotation.y == (Math.PI / 180) * 180) { //s
+                        cmbox.position.z += speed;
+                        cmmodel.position.z += speed;
                     }
-                    else if (cm.rotation.y == (Math.PI / 180) * 270) {
-                        cm.position.x += speed;
+                    else if (cmbox.rotation.y == (Math.PI / 180) * 270) { //d
+                        cmbox.position.x += speed;
+                        cmmodel.position.x += speed;
                     }
                     collision = false;
                 }
 
                 //dont fall off the map
-                if (cm.position.x > 101 || cm.position.x < 0) {
+                if (cmbox.position.x > 101 || cmbox.position.x < 0) {
                     reset();
                 }
-                if (cm.position.z > 101 || cm.position.z < 0) {
+                if (cmbox.position.z > 101 || cmbox.position.z < 0) {
                     reset();
                 }
 
                 cameraControls.update();
 
                 //make crackman follow its hitbox
-                cmmodel.position.x = cm.position.x;
-                cmmodel.position.z = cm.position.z;
+                cmmodel.position.x = cmbox.position.x;
+                cmmodel.position.z = cmbox.position.z;
             }
 
             //render the scene and camera
@@ -248,11 +253,12 @@
 
             //reset crackman and the camera
             function reset() {
-                cm.position.set(48, 1, 10);
+                cmbox.position.set(48, 1, 10);
                 cmmodel.position.set(48, 0, 10);
                 camera.position.z = -10;
                 camera.position.y = 20;
                 camera.position.x = 50;
+                cameratype = 1;
             }
             //switches between cameras
             function cameras() {
@@ -261,26 +267,26 @@
                     camera.lookAt(50, 0, 50);
                 }
                 else if (cameratype == 2) { //3rd person camera
-                    camera.lookAt(cm.position);
-                    camera.position.z = cm.position.z - 10;
-                    camera.position.y = cm.position.y + 10;
-                    camera.position.x = cm.position.x;
+                    camera.lookAt(cmbox.position);
+                    camera.position.z = cmbox.position.z - 10;
+                    camera.position.y = cmbox.position.y + 10;
+                    camera.position.x = cmbox.position.x;
                 }
                 else if (cameratype == 3) {  //1st person camera
-                    camera.position.z = cm.position.z;
-                    camera.position.y = cm.position.y;
-                    camera.position.x = cm.position.x;
-                    if (cm.rotation.y == (Math.PI / 180) * 0) {
-                        camera.lookAt(cm.position.x, cm.position.y, cm.position.z + 3);
+                    camera.position.z = cmbox.position.z;
+                    camera.position.y = cmbox.position.y;
+                    camera.position.x = cmbox.position.x;
+                    if (cmbox.rotation.y == (Math.PI / 180) * 0) {
+                        camera.lookAt(cmbox.position.x, cmbox.position.y, cmbox.position.z + 3);
                     }
-                    else if (cm.rotation.y == (Math.PI / 180) * 90) {
-                        camera.lookAt(cm.position.x + 3, cm.position.y, cm.position.z);
+                    else if (cmbox.rotation.y == (Math.PI / 180) * 90) {
+                        camera.lookAt(cmbox.position.x + 3, cmbox.position.y, cmbox.position.z);
                     }
-                    else if (cm.rotation.y == (Math.PI / 180) * 180) {
-                        camera.lookAt(cm.position.x, cm.position.y, cm.position.z - 3);
+                    else if (cmbox.rotation.y == (Math.PI / 180) * 180) {
+                        camera.lookAt(cmbox.position.x, cmbox.position.y, cmbox.position.z - 3);
                     }
-                    else if (cm.rotation.y == (Math.PI / 180) * 270) {
-                        camera.lookAt(cm.position.x - 3, cm.position.y, cm.position.z);
+                    else if (cmbox.rotation.y == (Math.PI / 180) * 270) {
+                        camera.lookAt(cmbox.position.x - 3, cmbox.position.y, cmbox.position.z);
                     }
                 }
             }
