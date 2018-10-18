@@ -84,8 +84,8 @@ newmtl Material__46
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka C:\School\NHL\Jaar 2\Periode 1\Software Ontwerp\Opdrachten\Large_RFR-005.jpg
-	map_Kd C:\School\NHL\Jaar 2\Periode 1\Software Ontwerp\Opdrachten\Large_RFR-005.jpg
+	map_Ka textures/Large_RFR-005.jpg
+	map_Kd textures/Large_RFR-005.jpg
 
 newmtl untitled_Mat_1_1
 	Ns 49.0196
@@ -122,8 +122,8 @@ newmtl Material__47
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka C:\School\NHL\Jaar 2\Periode 1\Software Ontwerp\Opdrachten\225px-Solid_blue.svg.png
-	map_Kd C:\School\NHL\Jaar 2\Periode 1\Software Ontwerp\Opdrachten\225px-Solid_blue.svg.png
+	map_Ka textures/blue.png
+	map_Kd textures/blue.png
 
 newmtl untitled_Mat
 	Ns 49.0196
