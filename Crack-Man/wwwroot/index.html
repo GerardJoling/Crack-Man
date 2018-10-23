@@ -75,7 +75,7 @@
                 cameraControls.update();
                 speed = 0.1;
                 move = 'stop';
-
+                wallCollision=false;
                 renderer = new THREE.WebGLRenderer({ antialias: true });
                 renderer.setPixelRatio(window.devicePixelRatio);
                 renderer.setSize(window.innerWidth, window.innerHeight + 5);
@@ -238,23 +238,6 @@
                     }
                 }
 
-                if (move == 'up') {
-                    cmbox.position.z += speed;
-                    cmbox.rotation.y = (Math.PI / 180) * 0;
-                }
-                if (move == 'down') {
-                    cmbox.position.z -= speed;
-                    cmbox.rotation.y = (Math.PI / 180) * 180;
-                }
-                if (move == 'left') {
-                    cmbox.position.x += speed;
-                    cmbox.rotation.y = (Math.PI / 180) * 90;
-                }
-                if (move == 'right') {
-                    cmbox.position.x -= speed;
-                    cmbox.rotation.y = (Math.PI / 180) * 270;
-                }
-
                 //collision check cmbox with the meshes in collidable lists
                 var originPoint = cmbox.position.clone();
                 for (var vertexIndex = 0; vertexIndex < cmbox.geometry.vertices.length; vertexIndex++) {
@@ -278,6 +261,26 @@
                     if (enemyCollisionResults.length > 0 && enemyCollisionResults[0].distance < directionVector.length()) //collision detected with enemy
                     {
                         enemyCollision = true;
+                    }
+                }
+
+                //move crackman if there is no collision
+                if (wallCollision == false) {
+                    if (move == 'up') {
+                        cmbox.position.z += speed;
+                        cmbox.rotation.y = (Math.PI / 180) * 0;
+                    }
+                    else if (move == 'down') {
+                        cmbox.position.z -= speed;
+                        cmbox.rotation.y = (Math.PI / 180) * 180;
+                    }
+                    else if (move == 'left') {
+                        cmbox.position.x += speed;
+                        cmbox.rotation.y = (Math.PI / 180) * 90;
+                    }
+                    else if (move == 'right') {
+                        cmbox.position.x -= speed;
+                        cmbox.rotation.y = (Math.PI / 180) * 270;
                     }
                 }
 
