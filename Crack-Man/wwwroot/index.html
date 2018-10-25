@@ -163,6 +163,14 @@
                         pills[i].position.x = p;
                         pills[i].position.y = 0.6;
                         pills[i].position.z = 20.1;
+                        var pillcGeometry = new THREE.CubeGeometry(length, 1, 1, 1, 1, 1);
+                        var pillcMaterial = new THREE.MeshBasicMaterial({ color: 0x003366 });
+                        var pillc = new THREE.Mesh(pillcGeometry, pillcMaterial);
+                        pillc.position.x = pills[i].position.x;
+                        pillc.position.y = pills[i].position.y;
+                        pillc.position.z = pills[i].position.z;
+                        scene.add(pillc);
+                        collidablePillList.push(pillc);
                         p = p + 2;
                     });
                 }
@@ -308,6 +316,45 @@
                         gethit();
                     }
                     wallCollision = false;
+                }
+
+                //move crackman if there is no collision
+                if (pillCollision == false) {
+                    if (move == 'up') {
+                        cmbox.position.z += speed;
+                        cmbox.rotation.y = (Math.PI / 180) * 0;
+                    }
+                    else if (move == 'down') {
+                        cmbox.position.z -= speed;
+                        cmbox.rotation.y = (Math.PI / 180) * 180;
+                    }
+                    else if (move == 'left') {
+                        cmbox.position.x += speed;
+                        cmbox.rotation.y = (Math.PI / 180) * 90;
+                    }
+                    else if (move == 'right') {
+                        cmbox.position.x -= speed;
+                        cmbox.rotation.y = (Math.PI / 180) * 270;
+                    }
+                }
+
+                //if there is collision with walls, move crackman 1 step back opposite to the direction he's facing and stop moving in that direction
+                if (pillCollision == true) {
+
+                    if (cmbox.rotation.y == (Math.PI / 180) * 0) { //w
+                        pointss = pointss + 10;
+
+                    }
+                    else if (cmbox.rotation.y == (Math.PI / 180) * 90) { //a
+                        pointss = pointss + 10;
+                    }
+                    else if (cmbox.rotation.y == (Math.PI / 180) * 180) { //s
+                        pointss = pointss + 10;
+                    }
+                    else if (cmbox.rotation.y == (Math.PI / 180) * 270) { //d
+                        pointss = pointss + 10;
+                    }
+                    pillCollision = false;
                 }
 
                 //dont fall off the map
