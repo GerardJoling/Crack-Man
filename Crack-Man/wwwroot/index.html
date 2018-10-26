@@ -36,25 +36,7 @@
             var pointss = 0;
             var m = 1;
             var pills = [];
-            pills[0] = 'pill0';
-            pills[1] = 'pill1';
-            pills[2] = 'pill2';
-            pills[3] = 'pill3';
-            pills[4] = 'pill4';
-            pills[5] = 'pill5';
-            pills[6] = 'pill6';
-            pills[7] = 'pill7';
-            pills[8] = 'pill8';
-            pills[9] = 'pill9';
-            pills[10] = 'pill10';
-            pills[11] = 'pill11';
-            pills[12] = 'pill12';
-            pills[13] = 'pill13';
-            pills[14] = 'pill14';
-            pills[15] = 'pill15';
-            pills[16] = 'pill16';
             var p = 10;
-            var i;
             var z;
             let health = document.getElementById("health");
 
@@ -75,7 +57,7 @@
                 cameraControls.update();
                 speed = 0.1;
                 move = 'stop';
-                wallCollision=false;
+                wallCollision = false;
                 renderer = new THREE.WebGLRenderer({ antialias: true });
                 renderer.setPixelRatio(window.devicePixelRatio);
                 renderer.setSize(window.innerWidth, window.innerHeight + 5);
@@ -126,17 +108,17 @@
                 loadOBJModel("models/", "crackman.obj", "models/", "crackman.mtl", (mesh) => {
                     cmmodel = mesh;
                     cmmodel.scale.set(.08, .08, .08);
-                    cmmodel.position.x = 48;
+                    cmmodel.position.x = 46.5;
                     cmmodel.position.y = 0;
-                    cmmodel.position.z = 10;
+                    cmmodel.position.z = 5;
                     scene.add(cmmodel)
                 });
 
                 //CRACKMAN HITBOX
                 var cubeGeometry = new THREE.CubeGeometry(3, 1, 3, 1, 1, 1);
-                var wireMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, transparent: true, opacity: 0.3 });
+                var wireMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, transparent: true, opacity: 0 });
                 cmbox = new THREE.Mesh(cubeGeometry, wireMaterial);
-                cmbox.position.set(48, 0.6, 10);
+                cmbox.position.set(46.5, 0.6, 5);
                 scene.add(cmbox);
 
                 //spawn pickups
@@ -154,24 +136,24 @@
                 collidableWallList.push(wall);
             }
             //generate pickups
-            function pickupspawn() {
-                for (i = 0; i < pills.length; i++) {
+            function pickupspawn(setx, setz) {
+                for (var i = 0; i < 16; i++) {
                     loadOBJModel("models/", "pill.obj", "models/", "pill.mtl", (mesh) => {
-                        pills[i] = mesh;
-                        pills[i].scale.set(.003, .003, .003);
-                        scene.add(pills[i]);
-                        pills[i].position.x = p;
-                        pills[i].position.y = 0.6;
-                        pills[i].position.z = 20.1;
+                        pills.push(mesh);
+                        mesh.scale.set(.006, .006, .006);
+                        scene.add(mesh);
+                        mesh.position.x = 47;
+                        mesh.position.y = 0.6;
+                        mesh.position.z = p;
                         var pillcGeometry = new THREE.CubeGeometry(length, 1, 1, 1, 1, 1);
-                        var pillcMaterial = new THREE.MeshBasicMaterial({ color: 0x003366 });
+                        var pillcMaterial = new THREE.MeshBasicMaterial({ color: 0x003366, transparent: true, opacity: 0 });
                         var pillc = new THREE.Mesh(pillcGeometry, pillcMaterial);
-                        pillc.position.x = pills[i].position.x;
-                        pillc.position.y = pills[i].position.y;
-                        pillc.position.z = pills[i].position.z;
+                        pillc.position.x = mesh.position.x;
+                        pillc.position.y = mesh.position.y;
+                        pillc.position.z = mesh.position.z;
                         scene.add(pillc);
                         collidablePillList.push(pillc);
-                        p = p + 2;
+                        p = p + 3;
                     });
                 }
             }
@@ -181,7 +163,7 @@
             }
             //rotates items
             function rotate(a) {
-                a.rotation.x = a.rotation.x + 0.01;
+                a.rotation.z = a.rotation.z + 0.01;
             }
             //does something
             function onWindowResize() {
@@ -198,6 +180,10 @@
 
             //things in here get updated
             function update() {
+
+                for (var i = 0; i < pills.length; i++) {
+                    rotate(pills[i]);
+                }
 
                 document.getElementById("Points").innerHTML = pointss + " Points";
                 if (health.value < 1) {
@@ -255,17 +241,24 @@
                     var ray = new THREE.Raycaster(originPoint, directionVector.clone().normalize());
 
                     var wallCollisionResults = ray.intersectObjects(collidableWallList);
-                    var pillCollisionResults = ray.intersectObjects(collidablePillList);
+
                     var enemyCollisionResults = ray.intersectObjects(collidableEnemyList);
 
                     if (wallCollisionResults.length > 0 && wallCollisionResults[0].distance < directionVector.length()) //collision detected with wall
                     {
                         wallCollision = true;
                     }
-                    if (pillCollisionResults.length > 0 && pillCollisionResults[0].distance < directionVector.length()) //collision detected with pill
-                    {
-                        pillCollision = true;
+
+                    for (var i = 0; i < collidablePillList.length; i++) {
+                        var pillCollisionResults = ray.intersectObject(collidablePillList[i]);
+                        if (pillCollisionResults.length > 0 && pillCollisionResults[0].distance < directionVector.length()) //collision detected with pill
+                        {
+                            pointss = pointss + 10;
+                            collidablePillList[i].position.y = -10;
+                            pills[i].position.y = -10;
+                        }
                     }
+
                     if (enemyCollisionResults.length > 0 && enemyCollisionResults[0].distance < directionVector.length()) //collision detected with enemy
                     {
                         enemyCollision = true;
@@ -318,53 +311,6 @@
                     wallCollision = false;
                 }
 
-                //move crackman if there is no collision
-                if (pillCollision == false) {
-                    if (move == 'up') {
-                        cmbox.position.z += speed;
-                        cmbox.rotation.y = (Math.PI / 180) * 0;
-                    }
-                    else if (move == 'down') {
-                        cmbox.position.z -= speed;
-                        cmbox.rotation.y = (Math.PI / 180) * 180;
-                    }
-                    else if (move == 'left') {
-                        cmbox.position.x += speed;
-                        cmbox.rotation.y = (Math.PI / 180) * 90;
-                    }
-                    else if (move == 'right') {
-                        cmbox.position.x -= speed;
-                        cmbox.rotation.y = (Math.PI / 180) * 270;
-                    }
-                }
-
-                //if there is collision with walls, move crackman 1 step back opposite to the direction he's facing and stop moving in that direction
-                if (pillCollision == true) {
-
-                    if (cmbox.rotation.y == (Math.PI / 180) * 0) { //w
-                        pointss = pointss + 10;
-
-                    }
-                    else if (cmbox.rotation.y == (Math.PI / 180) * 90) { //a
-                        pointss = pointss + 10;
-                    }
-                    else if (cmbox.rotation.y == (Math.PI / 180) * 180) { //s
-                        pointss = pointss + 10;
-                    }
-                    else if (cmbox.rotation.y == (Math.PI / 180) * 270) { //d
-                        pointss = pointss + 10;
-                    }
-                    pillCollision = false;
-                }
-
-                //dont fall off the map
-                if (cmbox.position.x > 101 || cmbox.position.x < 0) {
-                    reset();
-                }
-                if (cmbox.position.z > 101 || cmbox.position.z < 0) {
-                    reset();
-                }
-
                 cameraControls.update();
 
                 //make crackman follow its hitbox
@@ -381,8 +327,8 @@
 
             //reset crackman and the camera
             function reset() {
-                cmbox.position.set(48, 0.6, 10);
-                cmmodel.position.set(48, 0, 10);
+                cmbox.position.set(46.5, 0.6, 5);
+                cmmodel.position.set(46.5, 0, 5);
                 camera.position.z = -20;
                 camera.position.y = 40;
                 camera.position.x = 50;
@@ -390,6 +336,11 @@
                 speed = 0.1;
                 pointss = 0;
                 move = 'stop';
+                for (var i = 0; i < collidablePillList.length; i++) 
+                    {
+                        collidablePillList[i].position.y = 0.6;
+                        pills[i].position.y = 0.6;
+                    }
             }
             //switches between cameras
             function cameras() {
