@@ -18,32 +18,37 @@
 
         window.onload = function () {
 
+
             //variables
+            let health = document.getElementById("health");
             var worldObjects = {};
             var camera, scene, renderer;
             var cameraControls;
             var cmbox;
             var cmmodel;
             var cameratype;
-            var speed;
-            var move;
+
             var collidableWallList = [];
-            var wallCollision;
             var collidablePillList = [];
-            var pillCollision;
             var collidableEnemyList = [];
-            var enemyCollision;
-            var pointss = 0;
-            var m = 1;
+            var collidableSpeedList = [];
+            var collidableShroomList = [];
             var pills = [];
             var speeds = [];
-            var collidableSpeedList = [];
-            var z;
+            var shrooms = [];
+            var wallCollision = false;
+            var enemyCollision = false;
+
+            var speed = 0.2;
+            var move = 'stop';
+            var pointss = 0;
             var direction;
             var idle;
-            var superspeed;
-            var counter;
-            let health = document.getElementById("health");
+            var superspeed = false;
+            var supertrip = false;
+            var superhigh = false;
+            var counter = 0;
+            var counter2 = 0;
             init();
             animate();
 
@@ -59,11 +64,7 @@
                 cameratype = 1;
                 camera.lookAt(50, 0, 37.5);
                 cameraControls.update();
-                speed = 0.2;
-                move = 'stop';
-                superspeed = false;
-                counter = 0;
-                wallCollision = false;
+
                 renderer = new THREE.WebGLRenderer({ antialias: true });
                 renderer.setPixelRatio(window.devicePixelRatio);
                 renderer.setSize(window.innerWidth, window.innerHeight + 5);
@@ -78,6 +79,16 @@
                 plane.position.x = 50;
                 plane.position.z = 37.5;
                 scene.add(plane);
+
+                //generating trippy plane
+                var geometry2 = new THREE.PlaneGeometry(100, 75, 32);
+                var material2 = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/trippy.jpg"), side: THREE.DoubleSide });
+                var trippyPlane = new THREE.Mesh(geometry2, material2);
+                trippyPlane.rotation.x = Math.PI / 2.0;
+                trippyPlane.position.x = 50;
+                trippyPlane.position.z = 37.5;
+                trippyPlane.position.y = -1000;
+                scene.add(trippyPlane);
 
                 //generating skybox
                 var skyboxGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
@@ -234,11 +245,17 @@
                 spawnSpeeds(40, 59);
                 spawnSpeeds(17, 69);
                 spawnSpeeds(71.5, 54);
+
+                //spawn shrooms
+                spawnShrooms(67, 24);
+                spawnShrooms(93, 65);
+                spawnShrooms(8, 37);
             }
 
             //things in here get updated
             function update() {
 
+             
                 if (superspeed == true) {
                     counter += 1;
                     speed = 0.6;
@@ -257,6 +274,9 @@
                 }
                 for (var i = 0; i < speeds.length; i++) {
                     speeds[i].rotation.z = speeds[i].rotation.z + 0.15;
+                }
+                for (var i = 0; i < shrooms.length; i++) {
+                    shrooms[i].rotation.y = shrooms[i].rotation.y + 0.02;
                 }
 
                 document.getElementById("Points").innerHTML = pointss + " Points";
@@ -336,13 +356,22 @@
                         enemyCollision = true;
                     }
 
-                    for (var ii = 0; ii < collidableSpeedList.length; ii++) {
-                        var speedCollisionResults = ray.intersectObject(collidableSpeedList[ii]);
+                    for (var i = 0; i < collidableSpeedList.length; i++) {
+                        var speedCollisionResults = ray.intersectObject(collidableSpeedList[i]);
                         if (speedCollisionResults.length > 0 && speedCollisionResults[0].distance < directionVector.length()) //collision detected with speed
                         {
-                            collidableSpeedList[ii].position.y = -1000;
-                            speeds[ii].position.y = -1000;
+                            collidableSpeedList[i].position.y = -1000;
+                            speeds[i].position.y = -1000;
                             superspeed = true;
+                        }
+                    }
+                    for (var i = 0; i < collidableShroomList.length; i++) {
+                        var shroomCollisionResults = ray.intersectObject(collidableShroomList[i]);
+                        if (shroomCollisionResults.length > 0 && shroomCollisionResults[0].distance < directionVector.length()) //collision detected with mushroom
+                        {
+                            collidableShroomList[i].position.y = -1000;
+                            shrooms[i].position.y = -1000;
+                            supertrip = true;
                         }
                     }
                 }
@@ -396,7 +425,7 @@
                 cmmodel.position.z = cmbox.position.z;
                 cmmodel.rotation.y = cmbox.rotation.y;
             }
-           
+
             //generates a wall
             function createWall(setx, sety, setz, length, rotation) {
                 var wallGeometry = new THREE.CubeGeometry(length, 1.5, 4, 1, 1, 1);
@@ -424,7 +453,7 @@
                         if (direction == 'v') {
                             setz += 5;
                             mesh.position.x = setx;
-                            mesh.position.y = 0.6;
+                            mesh.position.y = 1;
                             mesh.position.z = setz;
                         }
                         var pillcGeometry = new THREE.CubeGeometry(3, 2, 2, 1, 1, 1);
@@ -442,25 +471,43 @@
 
             //generate speed pills
             function spawnSpeeds(setx, setz) {
-                for (var i = 0; i < 7; i++) {
-                    loadOBJModel("models/", "speed.obj", "models/", "speed.mtl", (mesh) => {
-                        speeds.push(mesh);
-                        mesh.scale.set(15, 15, 15);
-                        mesh.position.x = setx;
-                        mesh.position.y = 2;
-                        mesh.position.z = setz;
-                        scene.add(mesh);
+                loadOBJModel("models/", "speed.obj", "models/", "speed.mtl", (mesh) => {
+                    speeds.push(mesh);
+                    mesh.scale.set(15, 15, 15);
+                    mesh.position.x = setx;
+                    mesh.position.y = 2;
+                    mesh.position.z = setz;
+                    scene.add(mesh);
 
-                        var speedGeometry = new THREE.CubeGeometry(3, 3, 3, 1, 1, 1);
-                        var speedMaterial = new THREE.MeshBasicMaterial({ color: 0x003366, transparent: true, opacity: 0 });
-                        var speedHitbox = new THREE.Mesh(speedGeometry, speedMaterial);
-                        speedHitbox.position.x = mesh.position.x;
-                        speedHitbox.position.y = mesh.position.y;
-                        speedHitbox.position.z = mesh.position.z;
-                        scene.add(speedHitbox);
-                        collidableSpeedList.push(speedHitbox);
-                    });
-                }
+                    var Geometry = new THREE.CubeGeometry(3, 3, 3, 1, 1, 1);
+                    var Material = new THREE.MeshBasicMaterial({ color: 0x003366, transparent: true, opacity: 0 });
+                    var speedHitbox = new THREE.Mesh(Geometry, Material);
+                    speedHitbox.position.x = mesh.position.x;
+                    speedHitbox.position.y = mesh.position.y;
+                    speedHitbox.position.z = mesh.position.z;
+                    scene.add(speedHitbox);
+                    collidableSpeedList.push(speedHitbox);
+                });
+            }
+            //generate shrooms
+            function spawnShrooms(setx, setz) {
+                loadOBJModel("models/", "shroom.obj", "models/", "shroom.mtl", (mesh) => {
+                    shrooms.push(mesh);
+                    mesh.scale.set(6, 6, 6);
+                    mesh.position.x = setx;
+                    mesh.position.y = 3.5;
+                    mesh.position.z = setz;
+                    scene.add(mesh);
+
+                    var Geometry = new THREE.CubeGeometry(3, 3, 3, 1, 1, 1);
+                    var Material = new THREE.MeshBasicMaterial({ color: 0x003366, transparent: true, opacity: 0 });
+                    var shroomHitbox = new THREE.Mesh(Geometry, Material);
+                    shroomHitbox.position.x = mesh.position.x;
+                    shroomHitbox.position.y = mesh.position.y;
+                    shroomHitbox.position.z = mesh.position.z;
+                    scene.add(shroomHitbox);
+                    collidableShroomList.push(shroomHitbox);
+                });
             }
 
             //lower hp when hit
@@ -505,9 +552,13 @@
                     collidablePillList[i].position.y = 0.6;
                     pills[i].position.y = 0.6;
                 }
-                for (var ii = 0; ii < collidableSpeedList.length; ii++) {
-                    collidableSpeedList[ii].position.y = 2;
-                    speeds[ii].position.y = 2;
+                for (var i = 0; i < collidableSpeedList.length; i++) {
+                    collidableSpeedList[i].position.y = 2;
+                    speeds[i].position.y = 2;
+                }
+                for (var i = 0; i < collidableShroomList.length; i++) {
+                    collidableShroomList[i].position.y = 3.5;
+                    shrooms[i].position.y = 3.5;
                 }
 
             }
