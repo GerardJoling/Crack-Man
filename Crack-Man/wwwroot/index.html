@@ -36,8 +36,10 @@
             var pointss = 0;
             var m = 1;
             var pills = [];
-            var p = 10;
             var z;
+            var setx;
+            var sety;
+            var direction;
             let health = document.getElementById("health");
 
             init();
@@ -55,7 +57,7 @@
                 cameratype = 1;
                 camera.lookAt(50, 0, 37.5);
                 cameraControls.update();
-                speed = 0.1;
+                speed = 0.2;
                 move = 'stop';
                 wallCollision = false;
                 renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -122,7 +124,8 @@
                 scene.add(cmbox);
 
                 //spawn pickups
-                pickupspawn();
+                pickupspawn(47, 10, 'v');
+                pickupspawn(47, 50, 'h');
             }
 
             //generates a wall
@@ -136,15 +139,24 @@
                 collidableWallList.push(wall);
             }
             //generate pickups
-            function pickupspawn(setx, setz) {
+            function pickupspawn(setx, setz, direction) {
                 for (var i = 0; i < 16; i++) {
                     loadOBJModel("models/", "pill.obj", "models/", "pill.mtl", (mesh) => {
                         pills.push(mesh);
                         mesh.scale.set(.006, .006, .006);
                         scene.add(mesh);
-                        mesh.position.x = 47;
-                        mesh.position.y = 0.6;
-                        mesh.position.z = p;
+                        if (direction == 'h') {
+                            setx += 3;
+                            mesh.position.x = setx;
+                            mesh.position.y = 0.6;
+                            mesh.position.z = setz;
+                        }
+                        if (direction == 'v') {
+                            setz += 3;
+                            mesh.position.x = setx;
+                            mesh.position.y = 0.6;
+                            mesh.position.z = setz;
+                        }
                         var pillcGeometry = new THREE.CubeGeometry(length, 1, 1, 1, 1, 1);
                         var pillcMaterial = new THREE.MeshBasicMaterial({ color: 0x003366, transparent: true, opacity: 0 });
                         var pillc = new THREE.Mesh(pillcGeometry, pillcMaterial);
@@ -153,7 +165,7 @@
                         pillc.position.z = mesh.position.z;
                         scene.add(pillc);
                         collidablePillList.push(pillc);
-                        p = p + 3;
+                        
                     });
                 }
             }
@@ -336,11 +348,10 @@
                 speed = 0.1;
                 pointss = 0;
                 move = 'stop';
-                for (var i = 0; i < collidablePillList.length; i++) 
-                    {
-                        collidablePillList[i].position.y = 0.6;
-                        pills[i].position.y = 0.6;
-                    }
+                for (var i = 0; i < collidablePillList.length; i++) {
+                    collidablePillList[i].position.y = 0.6;
+                    pills[i].position.y = 0.6;
+                }
             }
             //switches between cameras
             function cameras() {
