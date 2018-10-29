@@ -36,12 +36,14 @@
             var pointss = 0;
             var m = 1;
             var pills = [];
+            var speeds = [];
+            var collidableSpeedList = [];
             var z;
-            var setx;
-            var sety;
             var direction;
+            var idle;
+            var superspeed;
+            var counter;
             let health = document.getElementById("health");
-
             init();
             animate();
 
@@ -59,6 +61,8 @@
                 cameraControls.update();
                 speed = 0.2;
                 move = 'stop';
+                superspeed = false;
+                counter = 0;
                 wallCollision = false;
                 renderer = new THREE.WebGLRenderer({ antialias: true });
                 renderer.setPixelRatio(window.devicePixelRatio);
@@ -98,103 +102,161 @@
                 var directionalLight = new THREE.DirectionalLight(0xffffff, 0.7);
                 scene.add(directionalLight);
 
-                //walls     x,  y,  z , length, angle
-                createWall(50.4, 0.8, 30, 30, 90);
-                createWall(42.4, 0.8, 30, 30, 90);
-                createWall(48.2, 0.8, 52, 30, 180);
-                createWall(60.2, 0.8, 30, 10, 90);
-                createWall(70.2, 0.8, 55, 30, 90);
-                createWall(70.2, 0.8, 15, 30, 90);
+                ////walls     x,  y,  z , length, angle
+                ////VERTIKAAL
+                ////kolom 1
+                //createWall(3, 0.8, 13, 25, 90);
+                //createWall(3, 0.8, 13, 25, 90);
+
+
+                ////kolom 2
+                //createWall(18, 0.8, 13, 25, 90);
+                //createWall(18, 0.8, 13, 25, 90);
+
+
+                ////kolom 3
+                //createWall(25, 0.8, 13, 25, 90);
+
+
+                ////kolom 4 nieuw
+
+
+
+                ////kolom 5
+                //createWall(50, 0.8, 13, 25, 90);
+                //createWall(50, 0.8, 13, 25, 90);
+                //createWall(50, 0.8, 13, 25, 90);
+                //createWall(50, 0.8, 13, 25, 90);
+
+
+                ////kolom 6 nieuw
+
+
+
+                ////kolom 7
+                //createWall(74, 0.8, 13, 25, 90);
+                //createWall(74, 0.8, 13, 25, 90);
+
+
+                ////kolom 8
+                //createWall(82, 0.8, 13, 25, 90);
+                //createWall(82, 0.8, 13, 25, 90);
+
+
+                ////kolom 9
+                //createWall(97, 0.8, 13, 25, 90);
+                //createWall(97, 0.8, 13, 25, 90);
+                ////HORIZONTAAL
+                ////rij 1
+                //createWall(50, 0.8, 3, 20, 180);
+
+
+                ////rij 2
+                //createWall(50, 0.8, 11, 20, 180);
+                //createWall(50, 0.8, 11, 20, 180);
+                //createWall(50, 0.8, 11, 20, 180);
+                //createWall(50, 0.8, 11, 20, 180);
+
+
+                ////rij 3
+                //createWall(50, 0.8, 20, 20, 180);
+                //createWall(50, 0.8, 20, 20, 180);
+                //createWall(50, 0.8, 20, 20, 180);
+
+
+                ////rij 4
+                //createWall(50, 0.8, 27, 20, 180);
+                //createWall(50, 0.8, 27, 20, 180);
+                //createWall(50, 0.8, 27, 20, 180);
+                //createWall(50, 0.8, 27, 20, 180);
+
+
+                ////rij 5
+                //createWall(50, 0.8, 34, 20, 180);
+                //createWall(50, 0.8, 34, 20, 180);
+                //createWall(50, 0.8, 34, 20, 180);
+
+
+                ////rij 6
+                //createWall(50, 0.8, 41, 20, 180);
+                //createWall(50, 0.8, 41, 20, 180);
+                //createWall(50, 0.8, 41, 20, 180);
+
+                ////rij 7
+                //createWall(50, 0.8, 48, 20, 180);
+                //createWall(50, 0.8, 48, 20, 180);
+                //createWall(50, 0.8, 48, 20, 180);
+                //createWall(50, 0.8, 48, 20, 180);
+
+
+                ////rij 8
+                //createWall(50, 0.8, 55, 20, 180);
+                //createWall(50, 0.8, 55, 20, 180);
+                //createWall(50, 0.8, 55, 20, 180);
+
+
+                ////rij 9
+                //createWall(50, 0.8, 64, 20, 180);
+                //createWall(50, 0.8, 64, 20, 180);
+                //createWall(50, 0.8, 64, 20, 180);
+                //createWall(50, 0.8, 64, 20, 180);
+
+
+                ////rij 10
+                //createWall(50, 0.8, 72, 100, 180);
 
                 //crackman model
                 loadOBJModel("models/", "crackman.obj", "models/", "crackman.mtl", (mesh) => {
                     cmmodel = mesh;
                     cmmodel.scale.set(.08, .08, .08);
                     cmmodel.position.x = 46.5;
-                    cmmodel.position.y = 0;
+                    cmmodel.position.y = -0.2;
                     cmmodel.position.z = 5;
                     scene.add(cmmodel)
                 });
 
                 //CRACKMAN HITBOX
-                var cubeGeometry = new THREE.CubeGeometry(3, 1, 3, 1, 1, 1);
+                var cubeGeometry = new THREE.CubeGeometry(3, 3, 3, 1, 1, 1);
                 var wireMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, transparent: true, opacity: 0 });
                 cmbox = new THREE.Mesh(cubeGeometry, wireMaterial);
                 cmbox.position.set(46.5, 0.6, 5);
                 scene.add(cmbox);
 
-                //spawn pickups
-                pickupspawn(47, 10, 'v');
-                pickupspawn(47, 50, 'h');
-            }
-
-            //generates a wall
-            function createWall(setx, sety, setz, length, rotation) {
-                var wallGeometry = new THREE.CubeGeometry(length, 1.5, 4, 1, 1, 1);
-                var wallMaterial = new THREE.MeshBasicMaterial({ color: 0x003366 });
-                var wall = new THREE.Mesh(wallGeometry, wallMaterial);
-                wall.position.set(setx, sety, setz);
-                wall.rotation.y = ((Math.PI / 180) * rotation);
-                scene.add(wall);
-                collidableWallList.push(wall);
-            }
-            //generate pickups
-            function pickupspawn(setx, setz, direction) {
-                for (var i = 0; i < 16; i++) {
-                    loadOBJModel("models/", "pill.obj", "models/", "pill.mtl", (mesh) => {
-                        pills.push(mesh);
-                        mesh.scale.set(.006, .006, .006);
-                        scene.add(mesh);
-                        if (direction == 'h') {
-                            setx += 3;
-                            mesh.position.x = setx;
-                            mesh.position.y = 0.6;
-                            mesh.position.z = setz;
-                        }
-                        if (direction == 'v') {
-                            setz += 3;
-                            mesh.position.x = setx;
-                            mesh.position.y = 0.6;
-                            mesh.position.z = setz;
-                        }
-                        var pillcGeometry = new THREE.CubeGeometry(length, 1, 1, 1, 1, 1);
-                        var pillcMaterial = new THREE.MeshBasicMaterial({ color: 0x003366, transparent: true, opacity: 0 });
-                        var pillc = new THREE.Mesh(pillcGeometry, pillcMaterial);
-                        pillc.position.x = mesh.position.x;
-                        pillc.position.y = mesh.position.y;
-                        pillc.position.z = mesh.position.z;
-                        scene.add(pillc);
-                        collidablePillList.push(pillc);
-
-                    });
+                //spawn basic pills
+                for (var x = 0; x < 15; x++) {
+                    pickupspawn(1 + (x * 7), -1, 'v');
                 }
-            }
-            //lower hp when hit
-            function gethit() {
-                health.value -= 2;
-            }
-            //rotates items
-            function rotate(a) {
-                a.rotation.z = a.rotation.z + 0.01;
-            }
-            //does something
-            function onWindowResize() {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-            }
-            //animates stuff
-            function animate() {
-                requestAnimationFrame(animate);
-                render();
-                update();
+
+                //spawn speed
+                spawnSpeeds(9.5, 23);
+                spawnSpeeds(47, 16);
+                spawnSpeeds(84, 7);
+                spawnSpeeds(40, 59);
+                spawnSpeeds(17, 69);
+                spawnSpeeds(71.5, 54);
             }
 
             //things in here get updated
             function update() {
 
+                if (superspeed == true) {
+                    counter += 1;
+                    speed = 0.6;
+                    if (counter == 150) { superspeed = false; counter = 0; speed = 0.2; }
+                }
+                if (cmmodel.position.y > 0.6) {
+                    if (superspeed == true) { idle = -0.15 } else { idle = -0.04; }
+                }
+                if (cmmodel.position.y < -0.1) {
+                    if (superspeed == true) { idle = 0.15 } else { idle = 0.04; }
+                }
+                cmmodel.position.y += idle;
+
                 for (var i = 0; i < pills.length; i++) {
                     rotate(pills[i]);
+                }
+                for (var i = 0; i < speeds.length; i++) {
+                    speeds[i].rotation.z = speeds[i].rotation.z + 0.15;
                 }
 
                 document.getElementById("Points").innerHTML = pointss + " Points";
@@ -202,8 +264,8 @@
                     health.value = 150;
                     //reset();
                 }
-                var map = {};
 
+                var map = {};
                 onkeydown = onkeyup = function (e) {
                     e = e || event;
                     map[e.keyCode] = e.type == 'keydown';
@@ -253,9 +315,6 @@
                     var ray = new THREE.Raycaster(originPoint, directionVector.clone().normalize());
 
                     var wallCollisionResults = ray.intersectObjects(collidableWallList);
-
-                    var enemyCollisionResults = ray.intersectObjects(collidableEnemyList);
-
                     if (wallCollisionResults.length > 0 && wallCollisionResults[0].distance < directionVector.length()) //collision detected with wall
                     {
                         wallCollision = true;
@@ -266,14 +325,25 @@
                         if (pillCollisionResults.length > 0 && pillCollisionResults[0].distance < directionVector.length()) //collision detected with pill
                         {
                             pointss = pointss + 10;
-                            collidablePillList[i].position.y = -10;
-                            pills[i].position.y = -10;
+                            collidablePillList[i].position.y = -1000;
+                            pills[i].position.y = -1000;
                         }
                     }
 
+                    var enemyCollisionResults = ray.intersectObjects(collidableEnemyList);
                     if (enemyCollisionResults.length > 0 && enemyCollisionResults[0].distance < directionVector.length()) //collision detected with enemy
                     {
                         enemyCollision = true;
+                    }
+
+                    for (var ii = 0; ii < collidableSpeedList.length; ii++) {
+                        var speedCollisionResults = ray.intersectObject(collidableSpeedList[ii]);
+                        if (speedCollisionResults.length > 0 && speedCollisionResults[0].distance < directionVector.length()) //collision detected with speed
+                        {
+                            collidableSpeedList[ii].position.y = -1000;
+                            speeds[ii].position.y = -1000;
+                            superspeed = true;
+                        }
                     }
                 }
 
@@ -326,6 +396,93 @@
                 cmmodel.position.z = cmbox.position.z;
                 cmmodel.rotation.y = cmbox.rotation.y;
             }
+           
+            //generates a wall
+            function createWall(setx, sety, setz, length, rotation) {
+                var wallGeometry = new THREE.CubeGeometry(length, 1.5, 4, 1, 1, 1);
+                var wallMaterial = new THREE.MeshBasicMaterial({ color: 0x003366 });
+                var wall = new THREE.Mesh(wallGeometry, wallMaterial);
+                wall.position.set(setx, sety, setz);
+                wall.rotation.y = ((Math.PI / 180) * rotation);
+                scene.add(wall);
+                collidableWallList.push(wall);
+            }
+
+            //generate standard pills
+            function pickupspawn(setx, setz, direction) {
+                for (var i = 0; i < 14; i++) {
+                    loadOBJModel("models/", "pill.obj", "models/", "pill.mtl", (mesh) => {
+                        pills.push(mesh);
+                        mesh.scale.set(.006, .006, .006);
+                        scene.add(mesh);
+                        if (direction == 'h') {
+                            setx += 5;
+                            mesh.position.x = setx;
+                            mesh.position.y = 0.6;
+                            mesh.position.z = setz;
+                        }
+                        if (direction == 'v') {
+                            setz += 5;
+                            mesh.position.x = setx;
+                            mesh.position.y = 0.6;
+                            mesh.position.z = setz;
+                        }
+                        var pillcGeometry = new THREE.CubeGeometry(3, 2, 2, 1, 1, 1);
+                        var pillcMaterial = new THREE.MeshBasicMaterial({ color: 0x003366, transparent: true, opacity: 0 });
+                        var pillc = new THREE.Mesh(pillcGeometry, pillcMaterial);
+                        pillc.position.x = mesh.position.x;
+                        pillc.position.y = mesh.position.y;
+                        pillc.position.z = mesh.position.z;
+                        scene.add(pillc);
+                        collidablePillList.push(pillc);
+
+                    });
+                }
+            }
+
+            //generate speed pills
+            function spawnSpeeds(setx, setz) {
+                for (var i = 0; i < 7; i++) {
+                    loadOBJModel("models/", "speed.obj", "models/", "speed.mtl", (mesh) => {
+                        speeds.push(mesh);
+                        mesh.scale.set(15, 15, 15);
+                        mesh.position.x = setx;
+                        mesh.position.y = 2;
+                        mesh.position.z = setz;
+                        scene.add(mesh);
+
+                        var speedGeometry = new THREE.CubeGeometry(3, 3, 3, 1, 1, 1);
+                        var speedMaterial = new THREE.MeshBasicMaterial({ color: 0x003366, transparent: true, opacity: 0 });
+                        var speedHitbox = new THREE.Mesh(speedGeometry, speedMaterial);
+                        speedHitbox.position.x = mesh.position.x;
+                        speedHitbox.position.y = mesh.position.y;
+                        speedHitbox.position.z = mesh.position.z;
+                        scene.add(speedHitbox);
+                        collidableSpeedList.push(speedHitbox);
+                    });
+                }
+            }
+
+            //lower hp when hit
+            function gethit() {
+                health.value -= 2;
+            }
+            //rotates items
+            function rotate(a) {
+                a.rotation.z = a.rotation.z + 0.01;
+            }
+            //does something
+            function onWindowResize() {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            }
+            //animates stuff
+            function animate() {
+                requestAnimationFrame(animate);
+                render();
+                update();
+            }
 
             //render the scene and camera
             function render() {
@@ -341,13 +498,18 @@
                 camera.position.y = 40;
                 camera.position.x = 50;
                 cameratype = 1;
-                speed = 0.1;
+                speed = 0.2;
                 pointss = 0;
                 move = 'stop';
                 for (var i = 0; i < collidablePillList.length; i++) {
                     collidablePillList[i].position.y = 0.6;
                     pills[i].position.y = 0.6;
                 }
+                for (var ii = 0; ii < collidableSpeedList.length; ii++) {
+                    collidableSpeedList[ii].position.y = 2;
+                    speeds[ii].position.y = 2;
+                }
+
             }
             //switches between cameras
             function cameras() {
