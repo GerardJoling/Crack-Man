@@ -2,15 +2,16 @@
 # File Created: 30.10.2018 10:41:39
 
 newmtl Material__35
-	Ns 10.0000
+	Ns 50.0000
 	Ni 1.5000
 	d 1.0000
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000 
-	illum 2
-	Ka 0.5880 0.5880 0.5880
-	Kd 0.5880 0.5880 0.5880
-	Ks 0.0000 0.0000 0.0000
-	Ke 0.0000 0.0000 0.0000
-	map_Ka shroom.jpg
-	map_Kd shroom.jpg
+	illum 70
+	Ka 1 1 1
+	Kd 1 1 1
+	Ks 0.8000 0.8000 0.8000
+	Ke 1.0000 1.0000 1.00000
+	map_Ka trippy.jpg
+	map_Kd trippy.jpg
+	illum 70
