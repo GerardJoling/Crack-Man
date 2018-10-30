@@ -38,6 +38,7 @@
             var wallCollision = false;
             var enemyCollision = false;
 
+            var plane;
             var speed = 0.2;
             var move = 'stop';
             var pointss = 0;
@@ -53,9 +54,6 @@
 
             //functions
             function init() {
-
-
-
 
                 scene = new THREE.Scene();
                 camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
@@ -76,21 +74,11 @@
                 //generating plane
                 var geometry = new THREE.PlaneGeometry(100, 75, 32);
                 var material = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/platje.png"), side: THREE.DoubleSide });
-                var plane = new THREE.Mesh(geometry, material);
+                plane = new THREE.Mesh(geometry, material);
                 plane.rotation.x = Math.PI / 2.0;
                 plane.position.x = 50;
                 plane.position.z = 37.5;
                 scene.add(plane);
-
-                //generating trippy plane
-                var geometry2 = new THREE.PlaneGeometry(100, 75, 32);
-                var material2 = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/trippy.jpg"), side: THREE.DoubleSide });
-                var trippyPlane = new THREE.Mesh(geometry2, material2);
-                trippyPlane.rotation.x = Math.PI / 2.0;
-                trippyPlane.position.x = 50;
-                trippyPlane.position.z = 37.5;
-                trippyPlane.position.y = -1000;
-                scene.add(trippyPlane);
 
                 //generating skybox
                 var skyboxGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
@@ -257,7 +245,13 @@
             //things in here get updated
             function update() {
 
-
+                if (supertrip == true) {
+                    counter2 += 1;
+                    plane.material = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/trippy.jpg"), side: THREE.DoubleSide });
+                    if (counter2 == 150) {
+                        supertrip = false; counter2 = 0; plane.material = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/platje.png"), side: THREE.DoubleSide });
+                    }
+                }
                 if (superspeed == true) {
                     counter += 1;
                     speed = 0.6;
@@ -495,9 +489,9 @@
             function spawnShrooms(setx, setz) {
                 loadOBJModel("models/", "shroom.obj", "models/", "shroom.mtl", (mesh) => {
                     shrooms.push(mesh);
-                    mesh.scale.set(1, 1, 1);
+                    mesh.scale.set(0.3, 0.3, 0.3);
                     mesh.position.x = setx;
-                    mesh.position.y = 3.5;
+                    mesh.position.y = 0.4;
                     mesh.position.z = setz;
                     scene.add(mesh);
 
