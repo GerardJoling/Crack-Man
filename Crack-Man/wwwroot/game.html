@@ -6,7 +6,6 @@
 </head>
 <body style="margin:0px;padding:0px;overflow:hidden;">
 
-    <progress id="health" value="150" max="150"></progress>  <audio controls autoplay style="visibility:hidden"><source src="audio/music.mp3" type="audio/mpeg"></audio><p id="Points">Points</p>
     <script>
 
         function parseCommand(input = "") {
@@ -26,7 +25,7 @@
             var cmbox;
             var cmmodel;
             var cameratype;
-
+            var lives = 3;
             var collidableWallList = [];
             var collidablePillList = [];
             var collidableEnemyList = [];
@@ -209,10 +208,10 @@
 
 
                 ////rij 9
-                //createWall(50, 0.8, 64, 20, 180);
-                //createWall(50, 0.8, 64, 20, 180);
-                //createWall(50, 0.8, 64, 20, 180);
-                //createWall(50, 0.8, 64, 20, 180);
+                createWall(50, 0.8, 64, 20, 180);
+                createWall(50, 0.8, 64, 20, 180);
+                createWall(50, 0.8, 64, 20, 180);
+                createWall(50, 0.8, 64, 20, 180);
 
 
                 ////rij 10
@@ -280,13 +279,18 @@
                 for (var i = 0; i < shrooms.length; i++) {
                     shrooms[i].rotation.y = shrooms[i].rotation.y + 0.02;
                 }
-
+                document.getElementById("lives").innerHTML = lives;
                 document.getElementById("Points").innerHTML = pointss + " Points";
                 if (health.value < 1) {
                     health.value = 150;
-                    //reset();
+                    lives = lives - 1;
+                    reset();
                 }
 
+                if (lives < 1) {
+                    document.cookie = pointss;
+                    location.href = 'end.php';
+                }
                 var map = {};
                 onkeydown = onkeyup = function (e) {
                     e = e || event;
@@ -404,18 +408,22 @@
                     if (cmbox.rotation.y == (Math.PI / 180) * 0) { //w
                         cmbox.position.z -= speed;
                         move = 'stop';
+                        gethit();
                     }
                     else if (cmbox.rotation.y == (Math.PI / 180) * 90) { //a
                         cmbox.position.x -= speed;
                         move = 'stop';
+                        gethit();
                     }
                     else if (cmbox.rotation.y == (Math.PI / 180) * 180) { //s
                         cmbox.position.z += speed;
                         move = 'stop';
+                        gethit();
                     }
                     else if (cmbox.rotation.y == (Math.PI / 180) * 270) { //d
                         cmbox.position.x += speed;
                         move = 'stop';
+                        gethit();
                     }
                     wallCollision = false;
                 }
@@ -514,7 +522,7 @@
 
             //lower hp when hit
             function gethit() {
-                health.value -= 2;
+                health.value -= 20;
             }
             //rotates items
             function rotate(a) {
@@ -623,6 +631,7 @@
     <script src="OrbitControls.js"></script>
     <script src="MTLLoader.js"></script>
     <script src="OBJLoader.js"></script>
+    <progress id="health" value="150" max="150"></progress>  <audio controls autoplay style="visibility:hidden"><source src="audio/music.mp3" type="audio/mpeg"></audio> <p>Lives: </p><p id="lives"></p><p id="Points">Points</p>
 
 </body>
 </html>
