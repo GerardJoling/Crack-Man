@@ -1,12 +1,11 @@
 ﻿<!DOCTYPE html>
 <html>
-
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>SimulationView</title>
 </head>
-
 <body style="margin:0px;padding:0px;overflow:hidden;">
+
     <progress id="health" value="150" max="150"></progress> <p id="Points">Points</p>
     <script>
 
@@ -54,6 +53,9 @@
 
             //functions
             function init() {
+
+
+
 
                 scene = new THREE.Scene();
                 camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
@@ -255,7 +257,7 @@
             //things in here get updated
             function update() {
 
-             
+
                 if (superspeed == true) {
                     counter += 1;
                     speed = 0.6;
@@ -493,7 +495,7 @@
             function spawnShrooms(setx, setz) {
                 loadOBJModel("models/", "shroom.obj", "models/", "shroom.mtl", (mesh) => {
                     shrooms.push(mesh);
-                    mesh.scale.set(6, 6, 6);
+                    mesh.scale.set(1, 1, 1);
                     mesh.position.x = setx;
                     mesh.position.y = 3.5;
                     mesh.position.z = setz;
@@ -621,6 +623,9 @@
     <script src="OrbitControls.js"></script>
     <script src="MTLLoader.js"></script>
     <script src="OBJLoader.js"></script>
-</body>
 
+</body>
 </html>
+<audio controls autoplay style="visibility:hidden">
+    <source src="audio/music.mp3" type="audio/mpeg">
+</audio>
