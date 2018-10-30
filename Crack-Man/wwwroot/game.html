@@ -37,6 +37,11 @@
             var wallCollision = false;
             var enemyCollision = false;
 
+            var skyboxMaterials;
+            var tripbox;
+            var skybox;
+            var tripplane;
+            var plane;
             var speed = 0.2;
             var move = 'stop';
             var pointss = 0;
@@ -52,9 +57,6 @@
 
             //functions
             function init() {
-
-
-
 
                 scene = new THREE.Scene();
                 camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
@@ -75,36 +77,38 @@
                 //generating plane
                 var geometry = new THREE.PlaneGeometry(100, 75, 32);
                 var material = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/platje.png"), side: THREE.DoubleSide });
-                var plane = new THREE.Mesh(geometry, material);
+                plane = new THREE.Mesh(geometry, material);
                 plane.rotation.x = Math.PI / 2.0;
                 plane.position.x = 50;
                 plane.position.z = 37.5;
                 scene.add(plane);
-
-                //generating trippy plane
-                var geometry2 = new THREE.PlaneGeometry(100, 75, 32);
-                var material2 = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/trippy.jpg"), side: THREE.DoubleSide });
-                var trippyPlane = new THREE.Mesh(geometry2, material2);
-                trippyPlane.rotation.x = Math.PI / 2.0;
-                trippyPlane.position.x = 50;
-                trippyPlane.position.z = 37.5;
-                trippyPlane.position.y = -1000;
-                scene.add(trippyPlane);
+                tripplane = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/trippy.jpg"), side: THREE.DoubleSide });
 
                 //generating skybox
                 var skyboxGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
-                var skyboxMaterials =
+                skyboxMaterials =
                     [
-                        new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/spires_ft.jpg"), side: THREE.BackSide }), //front side
-                        new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/spires_bk.jpg"), side: THREE.BackSide }), //back side
-                        new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/spires_up.jpg"), side: THREE.BackSide }), //top side
-                        new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/spires_dn.jpg"), side: THREE.BackSide }), //bottom side
-                        new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/spires_rt.jpg"), side: THREE.BackSide }), //right side
-                        new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/spires_lf.jpg"), side: THREE.BackSide }) //left side
+                        new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide }), //front side
+                        new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide }), //back side
+                        new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide }), //top side
+                        new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide }), //bottom side
+                        new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide }), //right side
+                        new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide }) //left side
                     ];
                 var skyboxMaterial = new THREE.MeshFaceMaterial(skyboxMaterials);
-                var skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
+                skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
+                skybox.position.y = 499;
                 scene.add(skybox);
+
+                //trippy skybox
+                tripbox = [
+                    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/trippy.jpg"), side: THREE.BackSide }), //front side
+                    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/trippy.jpg"), side: THREE.BackSide }), //back side
+                    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/trippy.jpg"), side: THREE.BackSide }), //top side
+                    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/trippy.jpg"), side: THREE.BackSide }), //bottom side
+                    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/trippy.jpg"), side: THREE.BackSide }), //right side
+                    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/trippy.jpg"), side: THREE.BackSide }) //left side
+                ];
 
                 //soft white light
                 var light = new THREE.AmbientLight(0x404040);
@@ -256,12 +260,25 @@
             //things in here get updated
             function update() {
 
+                if (supertrip == true) {
+                    counter2 += 1;
+                    plane.material = tripplane;
+                    skybox.material = new THREE.MeshFaceMaterial(tripbox);
+
+                    if (counter2 == 150) {
+                        supertrip = false;
+                        counter2 = 0;
+                        plane.material = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/platje.png"), side: THREE.DoubleSide });
+                        skybox.material = new THREE.MeshFaceMaterial(skyboxMaterials);
+                    }
+                }
 
                 if (superspeed == true) {
                     counter += 1;
                     speed = 0.6;
                     if (counter == 150) { superspeed = false; counter = 0; speed = 0.2; }
                 }
+
                 if (cmmodel.position.y > 0.6) {
                     if (superspeed == true) { idle = -0.15 } else { idle = -0.04; }
                 }
@@ -277,7 +294,7 @@
                     speeds[i].rotation.z = speeds[i].rotation.z + 0.15;
                 }
                 for (var i = 0; i < shrooms.length; i++) {
-                    shrooms[i].rotation.y = shrooms[i].rotation.y + 0.02;
+                    shrooms[i].rotation.y = shrooms[i].rotation.y + 0.03;
                 }
                 document.getElementById("lives").innerHTML = lives;
                 document.getElementById("Points").innerHTML = pointss + " Points";
@@ -503,9 +520,9 @@
             function spawnShrooms(setx, setz) {
                 loadOBJModel("models/", "shroom.obj", "models/", "shroom.mtl", (mesh) => {
                     shrooms.push(mesh);
-                    mesh.scale.set(1, 1, 1);
+                    mesh.scale.set(0.3, 0.3, 0.3);
                     mesh.position.x = setx;
-                    mesh.position.y = 3.5;
+                    mesh.position.y = 0.2;
                     mesh.position.z = setz;
                     scene.add(mesh);
 
@@ -568,7 +585,7 @@
                 }
                 for (var i = 0; i < collidableShroomList.length; i++) {
                     collidableShroomList[i].position.y = 3.5;
-                    shrooms[i].position.y = 3.5;
+                    shrooms[i].position.y = 0.2;
                 }
 
             }
