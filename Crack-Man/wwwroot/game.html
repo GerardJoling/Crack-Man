@@ -348,9 +348,12 @@
                 cameraControls.update();
 
                 //make crackman follow its hitbox
+                if (cmbox.position.x <= 0) { cmbox.position.x = 99; }
+                if (cmbox.position.x >= 100) { cmbox.position.x = 1; }
                 cmmodel.position.x = cmbox.position.x;
                 cmmodel.position.z = cmbox.position.z;
                 cmmodel.rotation.y = cmbox.rotation.y;
+                
             }
 
             //generates a wall
