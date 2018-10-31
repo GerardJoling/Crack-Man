@@ -13,7 +13,6 @@ $conn = new mysqli($servername, $username, $password, $database);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
-echo "Connected successfully";
 ?>
     <div id="allthethings">
         <div id="left"></div>
@@ -35,33 +34,45 @@ echo "Connected successfully";
         <br />
         <br />
         <?php
-$sql = "SELECT * FROM Highscores";
-if($result = mysqli_query($conn, $sql)){
-    if(mysqli_num_rows($result) > 0){
-        echo "<table>";
-            echo "<tr>";
-                echo "<th>Name</th>";
-                echo "<th>Score</th>";
-            echo "</tr>";
-        while($row = mysqli_fetch_array($result)){
-            echo "<tr>";
-                echo "<td>" . $row['Name'] . "</td>";
-                echo "<td>" . $row['Score'] . "</td>";
-            echo "</tr>";
-        }
-        echo "</table>";
+        $sql = "SELECT * FROM Highscores ORDER BY Score DESC LIMIT 10";
+        if($result = mysqli_query($conn, $sql)){
+        if(mysqli_num_rows($result) > 0){
+        echo "<table>
+            ";
+            echo "
+            <tr>
+                ";
+                echo "
+                <th>Name</th>";
+                echo "
+                <th>Score</th>";
+                echo "
+            </tr>";
+            while($row = mysqli_fetch_array($result)){
+            echo "
+            <tr>
+                ";
+                echo "
+                <td>" . $row['Name'] . "</td>";
+                echo "
+                <td>" . $row['Score'] . "</td>";
+                echo "
+            </tr>";
+            }
+            echo "
+        </table>";
         // Free result set
         mysqli_free_result($result);
-    } else{
+        } else{
         echo "No records matching your query were found.";
-    }
-} else{
-    echo "ERROR: Could not able to execute $sql. " . mysqli_error($conn);
-}
- 
-// Close connection
-mysqli_close($conn);
-?>
+        }
+        } else{
+        echo "ERROR: Could not able to execute $sql. " . mysqli_error($conn);
+        }
+
+        // Close connection
+        mysqli_close($conn);
+        ?>
     </div>
 
 </body>

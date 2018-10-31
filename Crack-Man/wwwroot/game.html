@@ -2,10 +2,9 @@
 <html>
 <head>
     <meta charset="UTF-8" />
-    <title>SimulationView</title>
+    <title>Crack-Man</title>
 </head>
 <body style="margin:0px;padding:0px;overflow:hidden;">
-
     <script>
 
         function parseCommand(input = "") {
@@ -18,6 +17,7 @@
 
 
             //variables
+            let score = document.getElementById("score");
             let health = document.getElementById("health");
             var worldObjects = {};
             var camera, scene, renderer;
@@ -25,7 +25,6 @@
             var cmbox;
             var cmmodel;
             var cameratype;
-            var lives = 3;
             var collidableWallList = [];
             var collidablePillList = [];
             var collidableEnemyList = [];
@@ -257,8 +256,15 @@
                 spawnShrooms(8, 37);
             }
 
+            function update2() {
+                if (health.value > 1) {
+                    update();
+                }
+            }
             //things in here get updated
             function update() {
+
+                score.value = pointss;
 
                 if (supertrip == true) {
                     counter2 += 1;
@@ -296,18 +302,7 @@
                 for (var i = 0; i < shrooms.length; i++) {
                     shrooms[i].rotation.y = shrooms[i].rotation.y + 0.03;
                 }
-                document.getElementById("lives").innerHTML = lives;
-                document.getElementById("Points").innerHTML = pointss + " Points";
-                if (health.value < 1) {
-                    health.value = 150;
-                    lives = lives - 1;
-                    reset();
-                }
 
-                if (lives < 1) {
-                    document.cookie = pointss;
-                    location.href = 'end.php';
-                }
                 var map = {};
                 onkeydown = onkeyup = function (e) {
                     e = e || event;
@@ -555,7 +550,7 @@
             function animate() {
                 requestAnimationFrame(animate);
                 render();
-                update();
+                update2();
             }
 
             //render the scene and camera
@@ -648,7 +643,12 @@
     <script src="OrbitControls.js"></script>
     <script src="MTLLoader.js"></script>
     <script src="OBJLoader.js"></script>
-    <progress id="health" value="150" max="150"></progress>  <audio controls autoplay style="visibility:hidden"><source src="audio/music.mp3" type="audio/mpeg"></audio> <p>Lives: </p><p id="lives"></p><p id="Points">Points</p>
+    <progress id="health" value="150" max="150"></progress>  <audio controls autoplay style="visibility:hidden"><source src="audio/music.mp3" type="audio/mpeg"></audio>
+    <form action="end.php" method="post">
+        Name: <input type="text" name="name" value="Name"> Points: <input readonly type="number" name="score" value="0" id="score">
+        <br>
+        <input type="submit" value="Send Highscore">
+    </form>
 
 </body>
 </html>
