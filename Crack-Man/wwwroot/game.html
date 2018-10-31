@@ -30,6 +30,8 @@
             var collidableEnemyList = [];
             var collidableSpeedList = [];
             var collidableShroomList = [];
+            var collidableWeedList = [];
+            var weeds = [];
             var pills = [];
             var speeds = [];
             var shrooms = [];
@@ -39,9 +41,7 @@
             var skyboxMaterials;
             var tripbox;
             var skybox;
-            var tripplane;
-            var plane;
-            var speed = 0.2;
+            var speed = 0.3;
             var move = 'stop';
             var pointss = 0;
             var direction;
@@ -51,6 +51,7 @@
             var superhigh = false;
             var counter = 0;
             var counter2 = 0;
+            var counter3 = 0;
             init();
             animate();
 
@@ -63,7 +64,7 @@
                 camera.position.z = -20;
                 camera.position.y = 40;
                 camera.position.x = 50;
-                cameratype = 1;
+                cameratype = 2;
                 camera.lookAt(50, 0, 37.5);
                 cameraControls.update();
 
@@ -73,18 +74,8 @@
                 document.body.appendChild(renderer.domElement);
                 window.addEventListener('resize', onWindowResize, false);
 
-                //generating plane
-                var geometry = new THREE.PlaneGeometry(100, 75, 32);
-                var material = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/platje.png"), side: THREE.DoubleSide });
-                plane = new THREE.Mesh(geometry, material);
-                plane.rotation.x = Math.PI / 2.0;
-                plane.position.x = 50;
-                plane.position.z = 37.5;
-                scene.add(plane);
-                tripplane = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/trippy.jpg"), side: THREE.DoubleSide });
-
                 //generating skybox
-                var skyboxGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
+                var skyboxGeometry = new THREE.BoxGeometry(300, 300, 300);
                 skyboxMaterials =
                     [
                         new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide }), //front side
@@ -96,7 +87,7 @@
                     ];
                 var skyboxMaterial = new THREE.MeshFaceMaterial(skyboxMaterials);
                 skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
-                skybox.position.y = 499;
+                skybox.position.y = 150;
                 scene.add(skybox);
 
                 //trippy skybox
@@ -117,116 +108,13 @@
                 var directionalLight = new THREE.DirectionalLight(0xffffff, 0.7);
                 scene.add(directionalLight);
 
-                ////walls     x,  y,  z , length, angle
-                ////VERTIKAAL
-                ////kolom 1
-                //createWall(3, 0.8, 13, 25, 90);
-                //createWall(3, 0.8, 13, 25, 90);
-
-
-                ////kolom 2
-                //createWall(18, 0.8, 13, 25, 90);
-                //createWall(18, 0.8, 13, 25, 90);
-
-
-                ////kolom 3
-                //createWall(25, 0.8, 13, 25, 90);
-
-
-                ////kolom 4 nieuw
-
-
-
-                ////kolom 5
-                //createWall(50, 0.8, 13, 25, 90);
-                //createWall(50, 0.8, 13, 25, 90);
-                //createWall(50, 0.8, 13, 25, 90);
-                //createWall(50, 0.8, 13, 25, 90);
-
-
-                ////kolom 6 nieuw
-
-
-
-                ////kolom 7
-                //createWall(74, 0.8, 13, 25, 90);
-                //createWall(74, 0.8, 13, 25, 90);
-
-
-                ////kolom 8
-                //createWall(82, 0.8, 13, 25, 90);
-                //createWall(82, 0.8, 13, 25, 90);
-
-
-                ////kolom 9
-                //createWall(97, 0.8, 13, 25, 90);
-                //createWall(97, 0.8, 13, 25, 90);
-                ////HORIZONTAAL
-                ////rij 1
-                //createWall(50, 0.8, 3, 20, 180);
-
-
-                ////rij 2
-                //createWall(50, 0.8, 11, 20, 180);
-                //createWall(50, 0.8, 11, 20, 180);
-                //createWall(50, 0.8, 11, 20, 180);
-                //createWall(50, 0.8, 11, 20, 180);
-
-
-                ////rij 3
-                //createWall(50, 0.8, 20, 20, 180);
-                //createWall(50, 0.8, 20, 20, 180);
-                //createWall(50, 0.8, 20, 20, 180);
-
-
-                ////rij 4
-                //createWall(50, 0.8, 27, 20, 180);
-                //createWall(50, 0.8, 27, 20, 180);
-                //createWall(50, 0.8, 27, 20, 180);
-                //createWall(50, 0.8, 27, 20, 180);
-
-
-                ////rij 5
-                //createWall(50, 0.8, 34, 20, 180);
-                //createWall(50, 0.8, 34, 20, 180);
-                //createWall(50, 0.8, 34, 20, 180);
-
-
-                ////rij 6
-                //createWall(50, 0.8, 41, 20, 180);
-                //createWall(50, 0.8, 41, 20, 180);
-                //createWall(50, 0.8, 41, 20, 180);
-
-                ////rij 7
-                //createWall(50, 0.8, 48, 20, 180);
-                //createWall(50, 0.8, 48, 20, 180);
-                //createWall(50, 0.8, 48, 20, 180);
-                //createWall(50, 0.8, 48, 20, 180);
-
-
-                ////rij 8
-                //createWall(50, 0.8, 55, 20, 180);
-                //createWall(50, 0.8, 55, 20, 180);
-                //createWall(50, 0.8, 55, 20, 180);
-
-
-                ////rij 9
-                createWall(50, 0.8, 64, 20, 180);
-                createWall(50, 0.8, 64, 20, 180);
-                createWall(50, 0.8, 64, 20, 180);
-                createWall(50, 0.8, 64, 20, 180);
-
-
-                ////rij 10
-                //createWall(50, 0.8, 72, 100, 180);
-
                 //crackman model
                 loadOBJModel("models/", "crackman.obj", "models/", "crackman.mtl", (mesh) => {
                     cmmodel = mesh;
                     cmmodel.scale.set(.08, .08, .08);
                     cmmodel.position.x = 46.5;
                     cmmodel.position.y = -0.2;
-                    cmmodel.position.z = 5;
+                    cmmodel.position.z = 7;
                     scene.add(cmmodel)
                 });
 
@@ -234,14 +122,15 @@
                 var cubeGeometry = new THREE.CubeGeometry(3, 3, 3, 1, 1, 1);
                 var wireMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, transparent: true, opacity: 0 });
                 cmbox = new THREE.Mesh(cubeGeometry, wireMaterial);
-                cmbox.position.set(46.5, 0.6, 5);
+                cmbox.position.set(46.5, 0.6, 7);
                 scene.add(cmbox);
 
                 //spawn basic pills
                 for (var x = 0; x < 15; x++) {
-                    pickupspawn(1 + (x * 7), -1, 'v');
+                    spawnPills(1 + (x * 7), -1, 'v');
                 }
 
+                //spawn walls  x, y, z, length, angle                 //vertikaal                  //kolom 1 & 9                 createWall(3, 0.8, 14.5, 26.5, 90);                 createWall(3, 0.8, 60, 26.5, 90);                  createWall(97, 0.8, 14.5, 26.5, 90);                 createWall(97, 0.8, 60, 26.5, 90);                  //kolom 2 & 8                 createWall(18, 0.8, 30.5, 9.5, 90);                 createWall(18, 0.8, 44.5, 9.5, 90);                  createWall(82, 0.8, 30.5, 9.5, 90);                 createWall(82, 0.8, 44.5, 9.5, 90);                  //kolom 3 & 7                 createWall(25, 0.8, 26.5, 17.5, 90);                 createWall(25, 0.8, 48.5, 17.5, 90);                  createWall(74, 0.8, 26.5, 17.5, 90);                 createWall(74, 0.8, 48.5, 17.5, 90);                  //kolom 4 & 6                 createWall(32.5, 0.8, 37.5, 10.5, 90);                  createWall(67, 0.8, 37.5, 10.5, 90);                  //kolom 5                 createWall(50, 0.8, 8, 9.5, 90);                 createWall(50, 0.8, 24, 9.5, 90);                 createWall(50, 0.8, 52, 9.5, 90);                 createWall(50, 0.8, 67, 9.5, 90);                  //Horizontaal                  //rij 1 & 10                 createWall(50, 0.8, 3, 96, 180);                  createWall(50, 0.8, 72, 96, 180);                  //rij 2 & 9                 createWall(14.5, 0.8, 11, 10.5, 180);                 createWall(34, 0.8, 11, 21, 180);                 createWall(65.5, 0.8, 11, 21, 180);                 createWall(86, 0.8, 11, 10.5, 180);                  createWall(14.5, 0.8, 64, 10.5, 180);                 createWall(34, 0.8, 64, 21, 180);                 createWall(65.5, 0.8, 64, 21, 180);                 createWall(86, 0.8, 64, 10.5, 180);                  //rij 3 & 8                 createWall(14.5, 0.8, 19.5, 10.5, 180);                 createWall(49.5, 0.8, 19.5, 38, 180);                 createWall(85.5, 0.8, 19.5, 10.5, 180);                  createWall(14.5, 0.8, 55.5, 10.5, 180);                 createWall(49.5, 0.8, 55.5, 38, 180);                 createWall(85.5, 0.8, 55.5, 10.5, 180);                  //rij 4 & 7                 createWall(10.5, 0.8, 27.5, 18.5, 180);                 createWall(34, 0.8, 27, 20, 180);                 createWall(65.5, 0.8, 27, 20, 180);                 createWall(89.5, 0.8, 27.5, 18.5, 180);                  createWall(10.5, 0.8, 47.5, 18.5, 180);                 createWall(34, 0.8, 48, 20, 180);                 createWall(65.5, 0.8, 48, 20, 180);                 createWall(89.5, 0.8, 47.5, 18.5, 180);                  //rij 5 & 6                 createWall(10, 0.8, 33.5, 19.5, 180);                 createWall(50, 0.8, 34, 32, 180);                 createWall(90, 0.8, 33.5, 19.5, 180);                  createWall(10, 0.8, 41.5, 19.5, 180);                 createWall(39.5, 0.8, 41, 16.5, 180);                 createWall(60, 0.8, 41, 16.5, 180);                 createWall(90, 0.8, 41.5, 19.5, 180); 
                 //spawn speed
                 spawnSpeeds(9.5, 23);
                 spawnSpeeds(47, 16);
@@ -254,37 +143,44 @@
                 spawnShrooms(67, 24);
                 spawnShrooms(93, 65);
                 spawnShrooms(8, 37);
+
+                //spawn weeds
+                spawnWeeds(28, 20);
+                spawnWeeds(15, 60);
+                spawnWeeds(90, 15);
             }
 
-            function update2() {
-                if (health.value > 1) {
-                    update();
-                }
-            }
+           
             //things in here get updated
             function update() {
 
                 score.value = pointss;
-
+               
+                //shroom effect
                 if (supertrip == true) {
                     counter2 += 1;
-                    plane.material = tripplane;
                     skybox.material = new THREE.MeshFaceMaterial(tripbox);
-
-                    if (counter2 == 150) {
+                    skybox.rotation.y = skybox.rotation.y + 0.01;
+                    cmmodel.scale.set(0.2, 0.2, 0.2);
+                    if (counter2 == 300) {
                         supertrip = false;
                         counter2 = 0;
-                        plane.material = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/platje.png"), side: THREE.DoubleSide });
                         skybox.material = new THREE.MeshFaceMaterial(skyboxMaterials);
+                        cmmodel.scale.set(0.08, 0.08, 0.08);
                     }
                 }
-
+                //speed effect
                 if (superspeed == true) {
                     counter += 1;
                     speed = 0.6;
-                    if (counter == 150) { superspeed = false; counter = 0; speed = 0.2; }
+                    if (counter == 200) { superspeed = false; counter = 0; speed = 0.3; }
                 }
+                //weed effect
+                if (superhigh == true) {
 
+                    if (counter3 == 200) { superhigh = false; counter3 = 0; }
+                }
+                //idle animations
                 if (cmmodel.position.y > 0.6) {
                     if (superspeed == true) { idle = -0.15 } else { idle = -0.04; }
                 }
@@ -292,7 +188,6 @@
                     if (superspeed == true) { idle = 0.15 } else { idle = 0.04; }
                 }
                 cmmodel.position.y += idle;
-
                 for (var i = 0; i < pills.length; i++) {
                     rotate(pills[i]);
                 }
@@ -302,7 +197,11 @@
                 for (var i = 0; i < shrooms.length; i++) {
                     shrooms[i].rotation.y = shrooms[i].rotation.y + 0.03;
                 }
+                for (var i = 0; i < weeds.length; i++) {
+                    weeds[i].rotation.y = shrooms[i].rotation.y + 0.05;
+                }
 
+                //keyboard controls
                 var map = {};
                 onkeydown = onkeyup = function (e) {
                     e = e || event;
@@ -332,7 +231,7 @@
                     if (map[32])//SPACEBAR to switch between cameras
                     {
                         cameratype += 1;
-                        if (cameratype == 4) { cameratype = 1; }
+                        if (cameratype == 3) { cameratype = 1; }
                     }
                     if (map[188] && speed >= 0.4) // < to go slower
                     {
@@ -344,7 +243,7 @@
                     }
                 }
 
-                //collision check cmbox with the meshes in collidable lists
+                //collision check crackmans hitbox (cmbox) with the meshes in the different collidable lists
                 var originPoint = cmbox.position.clone();
                 for (var vertexIndex = 0; vertexIndex < cmbox.geometry.vertices.length; vertexIndex++) {
                     var localVertex = cmbox.geometry.vertices[vertexIndex].clone();
@@ -392,9 +291,19 @@
                             supertrip = true;
                         }
                     }
+                    for (var i = 0; i < collidableWeedList.length; i++) {
+                        var weedCollisionResults = ray.intersectObject(collidableWeedList[i]);
+                        if (weedCollisionResults.length > 0 && weedCollisionResults[0].distance < directionVector.length()) //collision detected with weed
+                        {
+                            collidableWeedList[i].position.y = -1000;
+                            weeds[i].position.y = -1000;
+                            if (superhigh == true) { counter3 = 0; }
+                            superhigh = true;
+                        }
+                    }
                 }
 
-                //move crackman if there is no collision
+                //move crackman automatically if there is no collision
                 if (wallCollision == false) {
                     if (move == 'up') {
                         cmbox.position.z += speed;
@@ -420,22 +329,18 @@
                     if (cmbox.rotation.y == (Math.PI / 180) * 0) { //w
                         cmbox.position.z -= speed;
                         move = 'stop';
-                        gethit();
                     }
                     else if (cmbox.rotation.y == (Math.PI / 180) * 90) { //a
                         cmbox.position.x -= speed;
                         move = 'stop';
-                        gethit();
                     }
                     else if (cmbox.rotation.y == (Math.PI / 180) * 180) { //s
                         cmbox.position.z += speed;
                         move = 'stop';
-                        gethit();
                     }
                     else if (cmbox.rotation.y == (Math.PI / 180) * 270) { //d
                         cmbox.position.x += speed;
                         move = 'stop';
-                        gethit();
                     }
                     wallCollision = false;
                 }
@@ -450,7 +355,7 @@
 
             //generates a wall
             function createWall(setx, sety, setz, length, rotation) {
-                var wallGeometry = new THREE.CubeGeometry(length, 1.5, 4, 1, 1, 1);
+                var wallGeometry = new THREE.CubeGeometry(length, 1.5, 3.5, 1, 1, 1);
                 var wallMaterial = new THREE.MeshBasicMaterial({ color: 0x003366 });
                 var wall = new THREE.Mesh(wallGeometry, wallMaterial);
                 wall.position.set(setx, sety, setz);
@@ -460,7 +365,7 @@
             }
 
             //generate standard pills
-            function pickupspawn(setx, setz, direction) {
+            function spawnPills(setx, setz, direction) {
                 for (var i = 0; i < 14; i++) {
                     loadOBJModel("models/", "pill.obj", "models/", "pill.mtl", (mesh) => {
                         pills.push(mesh);
@@ -475,7 +380,7 @@
                         if (direction == 'v') {
                             setz += 5;
                             mesh.position.x = setx;
-                            mesh.position.y = 1;
+                            mesh.position.y = 0.6;
                             mesh.position.z = setz;
                         }
                         var pillcGeometry = new THREE.CubeGeometry(3, 2, 2, 1, 1, 1);
@@ -531,6 +436,26 @@
                     collidableShroomList.push(shroomHitbox);
                 });
             }
+            //generate weed
+            function spawnWeeds(setx, setz) {
+                loadOBJModel("models/", "weed.obj", "models/", "weed.mtl", (mesh) => {
+                    weeds.push(mesh);
+                    mesh.scale.set(0.6, 0.6, 0.6);
+                    mesh.position.x = setx;
+                    mesh.position.y = 0.15;
+                    mesh.position.z = setz;
+                    scene.add(mesh);
+
+                    var Geometry = new THREE.CubeGeometry(3, 3, 3, 1, 1, 1);
+                    var Material = new THREE.MeshBasicMaterial({ color: 0x003366, transparent: true, opacity: 0 });
+                    var weedHitbox = new THREE.Mesh(Geometry, Material);
+                    weedHitbox.position.x = mesh.position.x;
+                    weedHitbox.position.y = mesh.position.y;
+                    weedHitbox.position.z = mesh.position.z;
+                    scene.add(weedHitbox);
+                    collidableWeedList.push(weedHitbox);
+                });
+            }
 
             //lower hp when hit
             function gethit() {
@@ -550,7 +475,9 @@
             function animate() {
                 requestAnimationFrame(animate);
                 render();
-                update2();
+                if (health.value > 1) {
+                   update();
+                }
             }
 
             //render the scene and camera
@@ -561,13 +488,10 @@
 
             //reset crackman and the camera
             function reset() {
-                cmbox.position.set(46.5, 0.6, 5);
-                cmmodel.position.set(46.5, 0, 5);
-                camera.position.z = -20;
-                camera.position.y = 40;
-                camera.position.x = 50;
-                cameratype = 1;
-                speed = 0.2;
+                cmbox.position.set(46.5, 0.6, 7);
+                cmmodel.position.set(46.5, 0, 7);
+                cameratype = 2;
+                speed = 0.3;
                 pointss = 0;
                 move = 'stop';
                 for (var i = 0; i < collidablePillList.length; i++) {
@@ -579,8 +503,12 @@
                     speeds[i].position.y = 2;
                 }
                 for (var i = 0; i < collidableShroomList.length; i++) {
-                    collidableShroomList[i].position.y = 3.5;
+                    collidableShroomList[i].position.y = 2;
                     shrooms[i].position.y = 0.2;
+                }
+                for (var i = 0; i < collidableWeedList.length; i++) {
+                    collidableWeedList[i].position.y = 2;
+                    weeds[i].position.y = 0.15;
                 }
 
             }
@@ -592,26 +520,9 @@
                 }
                 else if (cameratype == 2) { //3rd person camera
                     camera.lookAt(cmbox.position);
-                    camera.position.z = cmbox.position.z - 10;
-                    camera.position.y = cmbox.position.y + 10;
+                    camera.position.z = cmbox.position.z - 20;
+                    camera.position.y = cmbox.position.y + 20;
                     camera.position.x = cmbox.position.x;
-                }
-                else if (cameratype == 3) {  //1st person camera
-                    camera.position.z = cmbox.position.z;
-                    camera.position.y = cmbox.position.y;
-                    camera.position.x = cmbox.position.x;
-                    if (cmbox.rotation.y == (Math.PI / 180) * 0) {
-                        camera.lookAt(cmbox.position.x, cmbox.position.y, cmbox.position.z + 3);
-                    }
-                    else if (cmbox.rotation.y == (Math.PI / 180) * 90) {
-                        camera.lookAt(cmbox.position.x + 3, cmbox.position.y, cmbox.position.z);
-                    }
-                    else if (cmbox.rotation.y == (Math.PI / 180) * 180) {
-                        camera.lookAt(cmbox.position.x, cmbox.position.y, cmbox.position.z - 3);
-                    }
-                    else if (cmbox.rotation.y == (Math.PI / 180) * 270) {
-                        camera.lookAt(cmbox.position.x - 3, cmbox.position.y, cmbox.position.z);
-                    }
                 }
             }
 
