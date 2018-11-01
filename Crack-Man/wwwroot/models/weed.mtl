@@ -1,39 +1,14 @@
 # 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
-# File Created: 31.10.2018 11:57:20
+# File Created: 01.11.2018 11:42:12
 
-newmtl PotLeaf__1__SVGMat_002
-	Ns 50.0000
+newmtl PotLeaf_SVGMat
+	Ns 10.0000
 	Ni 1.5000
 	d 1.0000
 	Tr 0.0000
 	Tf 1.0000 1.0000 1.0000 
-	illum 200
+	illum 2
 	Ka 0.5880 0.5880 0.5880
 	Kd 0.5880 0.5880 0.5880
-Ks 0.8000 0.8000 0.8000
-	Ke 1.0000 1.0000 1.00000
-
-newmtl PotLeaf__1__SVGMat_001
-	Ns 50.0000
-	Ni 1.5000
-	d 1.0000
-	Tr 0.0000
-	Tf 1.0000 1.0000 1.0000 
-	illum 200
-	Ka 0.5880 0.5880 0.5880
-	Kd 0.5880 0.5880 0.5880
-	Ks 0.8000 0.8000 0.8000
-	Ke 1.0000 1.0000 1.00000
-
-newmtl Material__25
-	Ns 50.0000
-	Ni 1.5000
-	d 1.0000
-	Tr 0.0000
-	Tf 1.0000 1.0000 1.0000 
-	illum 200
-	Ka 1 1 1
-	Kd 1 1 1
-Ks 0.8000 0.8000 0.8000
-	Ke 1.0000 1.0000 1.00000
-	map_Kd beautiful-green-texture-background_1035-12479.jpg
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
