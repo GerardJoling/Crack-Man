@@ -171,16 +171,32 @@
                 scene.add(gbox);
 
                 //CRACKMAN HITBOX
-                var cubeGeometry = new THREE.CubeGeometry(3, 3, 3, 1, 1, 1);
-                var wireMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, transparent: true, opacity: 0 });
+                var cubeGeometry = new THREE.CubeGeometry(2.5, 3, 2.5, 1, 1, 1);
+                var wireMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, transparent: true, opacity: 0.5 });
                 cmbox = new THREE.Mesh(cubeGeometry, wireMaterial);
                 cmbox.position.set(46.5, 0.6, 7);
                 scene.add(cmbox);
 
                 //spawn basic pills
-                for (var x = 0; x < 15; x++) {
-                    spawnPills(1 + (x * 7), -1, 'v');
-                }
+                spawnPills(2, 7, 'h', 19);
+                spawnPills(2, 11, 'h', 19);
+                spawnPills(2, 15, 'h', 19);
+                spawnPills(1.9, 19, 'h', 19)
+                spawnPills(2, 23, 'h', 19);
+                spawnPills(2, 27, 'h', 19);
+                spawnPills(30, 30, 'h', 10);
+                spawnPills(1, 33, 'h', 19);
+                spawnPills(1, 37, 'h', 6);
+                spawnPills(70, 37, 'h', 6);
+
+                spawnPills(2, 68, 'h', 19);
+                spawnPills(2, 64, 'h', 19);
+                spawnPills(2, 60, 'h', 19);
+                spawnPills(1.9, 56, 'h', 19)
+                spawnPills(2, 52, 'h', 19);
+                spawnPills(2, 48, 'h', 19);
+                spawnPills(30, 44, 'h', 10);
+                spawnPills(1, 41, 'h', 19);
 
                 //spawn walls  x, y, z, length, angle
                 //vertikaal
@@ -227,7 +243,7 @@
                 //rij 2 & 9
                 createWall(14.5, 0.8, 11, 10.5, 180);
                 createWall(34, 0.8, 11, 21, 180);
-                createWall(65.5, 0.8, 11, 21, 180);
+                createWall(65.5, 0.8, 11, 20, 180);
                 createWall(86, 0.8, 11, 10.5, 180);
 
                 createWall(14.5, 0.8, 64, 10.5, 180);
@@ -271,7 +287,7 @@
                 spawnSpeeds(84, 7);
                 spawnSpeeds(40, 59);
                 spawnSpeeds(17, 69);
-                spawnSpeeds(71.5, 54);
+                spawnSpeeds(70, 54);
 
                 //spawn shrooms
                 spawnShrooms(67, 24);
@@ -284,12 +300,12 @@
                 spawnWeeds(90, 15);
             }
 
-           
+
             //things in here get updated
             function update() {
 
                 score.value = pointss;
-               
+
                 //shroom effect
                 if (supertrip == true) {
                     counter2 += 1;
@@ -487,7 +503,7 @@
                 cmmodel.position.x = cmbox.position.x;
                 cmmodel.position.z = cmbox.position.z;
                 cmmodel.rotation.y = cmbox.rotation.y;
-                
+
             }
 
             //generates a wall
@@ -502,14 +518,14 @@
             }
 
             //generate standard pills
-            function spawnPills(setx, setz, direction) {
-                for (var i = 0; i < 14; i++) {
+            function spawnPills(setx, setz, direction, amount) {
+                for (var i = 0; i < amount; i++) {
                     loadOBJModel("models/", "pill.obj", "models/", "pill.mtl", (mesh) => {
                         pills.push(mesh);
                         mesh.scale.set(.006, .006, .006);
                         scene.add(mesh);
                         if (direction == 'h') {
-                            setx += 5;
+                            setx += 4.8;
                             mesh.position.x = setx;
                             mesh.position.y = 0.6;
                             mesh.position.z = setz;
@@ -520,8 +536,8 @@
                             mesh.position.y = 0.6;
                             mesh.position.z = setz;
                         }
-                        var pillcGeometry = new THREE.CubeGeometry(3, 2, 2, 1, 1, 1);
-                        var pillcMaterial = new THREE.MeshBasicMaterial({ color: 0x003366, transparent: true, opacity: 0 });
+                        var pillcGeometry = new THREE.CubeGeometry(2.2, 2, 2.2, 1, 1, 1);
+                        var pillcMaterial = new THREE.MeshBasicMaterial({ color: 0x003366, transparent: true, opacity: 0.5 });
                         var pillc = new THREE.Mesh(pillcGeometry, pillcMaterial);
                         pillc.position.x = mesh.position.x;
                         pillc.position.y = mesh.position.y;
@@ -613,7 +629,7 @@
                 requestAnimationFrame(animate);
                 render();
                 if (health.value > 1) {
-                   update();
+                    update();
                 }
             }
 
