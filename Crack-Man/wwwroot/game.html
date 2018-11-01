@@ -41,6 +41,7 @@
             var skyboxMaterials;
             var tripbox;
             var skybox;
+            var weedbox;
             var speed = 0.3;
             var move = 'stop';
             var pointss = 0;
@@ -85,6 +86,7 @@
                         new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide }), //right side
                         new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide }) //left side
                     ];
+                
                 var skyboxMaterial = new THREE.MeshFaceMaterial(skyboxMaterials);
                 skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
                 skybox.position.y = 150;
@@ -99,7 +101,15 @@
                     new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/trippy.jpg"), side: THREE.BackSide }), //right side
                     new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/trippy.jpg"), side: THREE.BackSide }) //left side
                 ];
-
+                //weed skybox
+                weedbox = [
+                    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/weed.jpg"), side: THREE.BackSide }), //front side
+                    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/weed.jpg"), side: THREE.BackSide }), //back side
+                    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/weed.jpg"), side: THREE.BackSide }), //top side
+                    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/weed.jpg"), side: THREE.BackSide }), //bottom side
+                    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/weed.jpg"), side: THREE.BackSide }), //right side
+                    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/weed.jpg"), side: THREE.BackSide }) //left side
+                ];
                 //soft white light
                 var light = new THREE.AmbientLight(0x404040);
                 scene.add(light);
@@ -327,8 +337,14 @@
                 }
                 //weed effect
                 if (superhigh == true) {
-
-                    if (counter3 == 200) { superhigh = false; counter3 = 0; }
+                    counter3 += 1;
+                    skybox.material = new THREE.MeshFaceMaterial(weedbox);
+                    skybox.rotation.y = skybox.rotation.y + 0.01;
+                    if (counter3 == 200) {
+                        superhigh = false;
+                        counter3 = 0;
+                        skybox.material = new THREE.MeshFaceMaterial(skyboxMaterials);
+                    }
                 }
                 //idle animations
                 if (cmmodel.position.y > 0.6) {
@@ -429,6 +445,7 @@
                         {
                             collidableSpeedList[i].position.y = -1000;
                             speeds[i].position.y = -1000;
+                            if (superspeed == true) { counter = 0; }
                             superspeed = true;
                         }
                     }
@@ -438,6 +455,7 @@
                         {
                             collidableShroomList[i].position.y = -1000;
                             shrooms[i].position.y = -1000;
+                            if (supertrip == true) { counter2 = 0; }
                             supertrip = true;
                         }
                     }
