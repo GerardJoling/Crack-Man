@@ -23,4 +23,7 @@ if ($conn->query($sql) === TRUE) {
 }
 
 $conn->close();
+echo '<script type="text/javascript">
+           window.location = "highscores.php"
+      </script>';
 ?>
