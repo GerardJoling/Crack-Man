@@ -118,6 +118,58 @@
                     scene.add(cmmodel)
                 });
 
+
+                //ghost model
+                loadOBJModel("models/", "ghost.obj", "models/", "ghost.mtl", (mesh) => {
+                    ghost = mesh;
+                    ghost.scale.set(.002, .002, .002);
+                    ghost.position.x = 40.5;
+                    ghost.position.y = 2;
+                    ghost.position.z = 37.1;
+                    scene.add(ghost)
+                });
+
+                //ghost model
+                loadOBJModel("models/", "ghost.obj", "models/", "ghost.mtl", (mesh) => {
+                    ghost = mesh;
+                    ghost.scale.set(.002, .002, .002);
+                    ghost.position.x = 50.5;
+                    ghost.position.y = 2;
+                    ghost.position.z = 37.1;
+                    scene.add(ghost)
+                });
+
+                //ghost model
+                loadOBJModel("models/", "ghost.obj", "models/", "ghost.mtl", (mesh) => {
+                    ghost = mesh;
+                    ghost.scale.set(.002, .002, .002);
+                    ghost.position.x = 60.5;
+                    ghost.position.y = 2;
+                    ghost.position.z = 37.1;
+                    scene.add(ghost)
+                });
+
+                //ghost HITBOX
+                var cubeGeometry = new THREE.CubeGeometry(3, 3, 3, 1, 1, 1);
+                var wireMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, transparent: true, opacity: 0 });
+                gbox = new THREE.Mesh(cubeGeometry, wireMaterial);
+                gbox.position.set(50.5, 2, 37.1);
+                scene.add(gbox);
+
+                //ghost HITBOX
+                var cubeGeometry = new THREE.CubeGeometry(3, 3, 3, 1, 1, 1);
+                var wireMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, transparent: true, opacity: 0 });
+                gbox = new THREE.Mesh(cubeGeometry, wireMaterial);
+                gbox.position.set(40.5, 2, 37.1);
+                scene.add(gbox);
+
+                //ghost HITBOX
+                var cubeGeometry = new THREE.CubeGeometry(3, 3, 3, 1, 1, 1);
+                var wireMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, transparent: true, opacity: 0 });
+                gbox = new THREE.Mesh(cubeGeometry, wireMaterial);
+                gbox.position.set(60.5, 2, 37.1);
+                scene.add(gbox);
+
                 //CRACKMAN HITBOX
                 var cubeGeometry = new THREE.CubeGeometry(3, 3, 3, 1, 1, 1);
                 var wireMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, transparent: true, opacity: 0 });
@@ -130,7 +182,89 @@
                     spawnPills(1 + (x * 7), -1, 'v');
                 }
 
-                //spawn walls  x, y, z, length, angle                 //vertikaal                  //kolom 1 & 9                 createWall(3, 0.8, 14.5, 26.5, 90);                 createWall(3, 0.8, 60, 26.5, 90);                  createWall(97, 0.8, 14.5, 26.5, 90);                 createWall(97, 0.8, 60, 26.5, 90);                  //kolom 2 & 8                 createWall(18, 0.8, 30.5, 9.5, 90);                 createWall(18, 0.8, 44.5, 9.5, 90);                  createWall(82, 0.8, 30.5, 9.5, 90);                 createWall(82, 0.8, 44.5, 9.5, 90);                  //kolom 3 & 7                 createWall(25, 0.8, 26.5, 17.5, 90);                 createWall(25, 0.8, 48.5, 17.5, 90);                  createWall(74, 0.8, 26.5, 17.5, 90);                 createWall(74, 0.8, 48.5, 17.5, 90);                  //kolom 4 & 6                 createWall(32.5, 0.8, 37.5, 10.5, 90);                  createWall(67, 0.8, 37.5, 10.5, 90);                  //kolom 5                 createWall(50, 0.8, 8, 9.5, 90);                 createWall(50, 0.8, 24, 9.5, 90);                 createWall(50, 0.8, 52, 9.5, 90);                 createWall(50, 0.8, 67, 9.5, 90);                  //Horizontaal                  //rij 1 & 10                 createWall(50, 0.8, 3, 96, 180);                  createWall(50, 0.8, 72, 96, 180);                  //rij 2 & 9                 createWall(14.5, 0.8, 11, 10.5, 180);                 createWall(34, 0.8, 11, 21, 180);                 createWall(65.5, 0.8, 11, 21, 180);                 createWall(86, 0.8, 11, 10.5, 180);                  createWall(14.5, 0.8, 64, 10.5, 180);                 createWall(34, 0.8, 64, 21, 180);                 createWall(65.5, 0.8, 64, 21, 180);                 createWall(86, 0.8, 64, 10.5, 180);                  //rij 3 & 8                 createWall(14.5, 0.8, 19.5, 10.5, 180);                 createWall(49.5, 0.8, 19.5, 38, 180);                 createWall(85.5, 0.8, 19.5, 10.5, 180);                  createWall(14.5, 0.8, 55.5, 10.5, 180);                 createWall(49.5, 0.8, 55.5, 38, 180);                 createWall(85.5, 0.8, 55.5, 10.5, 180);                  //rij 4 & 7                 createWall(10.5, 0.8, 27.5, 18.5, 180);                 createWall(34, 0.8, 27, 20, 180);                 createWall(65.5, 0.8, 27, 20, 180);                 createWall(89.5, 0.8, 27.5, 18.5, 180);                  createWall(10.5, 0.8, 47.5, 18.5, 180);                 createWall(34, 0.8, 48, 20, 180);                 createWall(65.5, 0.8, 48, 20, 180);                 createWall(89.5, 0.8, 47.5, 18.5, 180);                  //rij 5 & 6                 createWall(10, 0.8, 33.5, 19.5, 180);                 createWall(50, 0.8, 34, 32, 180);                 createWall(90, 0.8, 33.5, 19.5, 180);                  createWall(10, 0.8, 41.5, 19.5, 180);                 createWall(39.5, 0.8, 41, 16.5, 180);                 createWall(60, 0.8, 41, 16.5, 180);                 createWall(90, 0.8, 41.5, 19.5, 180); 
+                //spawn walls  x, y, z, length, angle
+                //vertikaal
+
+                //kolom 1 & 9
+                createWall(3, 0.8, 14.5, 26.5, 90);
+                createWall(3, 0.8, 60, 26.5, 90);
+
+                createWall(97, 0.8, 14.5, 26.5, 90);
+                createWall(97, 0.8, 60, 26.5, 90);
+
+                //kolom 2 & 8
+                createWall(18, 0.8, 30.5, 9.5, 90);
+                createWall(18, 0.8, 44.5, 9.5, 90);
+
+                createWall(82, 0.8, 30.5, 9.5, 90);
+                createWall(82, 0.8, 44.5, 9.5, 90);
+
+                //kolom 3 & 7
+                createWall(25, 0.8, 26.5, 17.5, 90);
+                createWall(25, 0.8, 48.5, 17.5, 90);
+
+                createWall(74, 0.8, 26.5, 17.5, 90);
+                createWall(74, 0.8, 48.5, 17.5, 90);
+
+                //kolom 4 & 6
+                createWall(32.5, 0.8, 37.5, 10.5, 90);
+
+                createWall(67, 0.8, 37.5, 10.5, 90);
+
+                //kolom 5
+                createWall(50, 0.8, 8, 9.5, 90);
+                createWall(50, 0.8, 24, 9.5, 90);
+                createWall(50, 0.8, 52, 9.5, 90);
+                createWall(50, 0.8, 67, 9.5, 90);
+
+                //Horizontaal
+
+                //rij 1 & 10
+                createWall(50, 0.8, 3, 96, 180);
+
+                createWall(50, 0.8, 72, 96, 180);
+
+                //rij 2 & 9
+                createWall(14.5, 0.8, 11, 10.5, 180);
+                createWall(34, 0.8, 11, 21, 180);
+                createWall(65.5, 0.8, 11, 21, 180);
+                createWall(86, 0.8, 11, 10.5, 180);
+
+                createWall(14.5, 0.8, 64, 10.5, 180);
+                createWall(34, 0.8, 64, 21, 180);
+                createWall(65.5, 0.8, 64, 21, 180);
+                createWall(86, 0.8, 64, 10.5, 180);
+
+                //rij 3 & 8
+                createWall(14.5, 0.8, 19.5, 10.5, 180);
+                createWall(49.5, 0.8, 19.5, 38, 180);
+                createWall(85.5, 0.8, 19.5, 10.5, 180);
+
+                createWall(14.5, 0.8, 55.5, 10.5, 180);
+                createWall(49.5, 0.8, 55.5, 38, 180);
+                createWall(85.5, 0.8, 55.5, 10.5, 180);
+
+                //rij 4 & 7
+                createWall(10.5, 0.8, 27.5, 18.5, 180);
+                createWall(34, 0.8, 27, 20, 180);
+                createWall(65.5, 0.8, 27, 20, 180);
+                createWall(89.5, 0.8, 27.5, 18.5, 180);
+
+                createWall(10.5, 0.8, 47.5, 18.5, 180);
+                createWall(34, 0.8, 48, 20, 180);
+                createWall(65.5, 0.8, 48, 20, 180);
+                createWall(89.5, 0.8, 47.5, 18.5, 180);
+
+                //rij 5 & 6
+                createWall(10, 0.8, 33.5, 19.5, 180);
+                createWall(50, 0.8, 34, 32, 180);
+                createWall(90, 0.8, 33.5, 19.5, 180);
+
+                createWall(10, 0.8, 41.5, 19.5, 180);
+                createWall(39.5, 0.8, 41, 16.5, 180);
+                createWall(60, 0.8, 41, 16.5, 180);
+                createWall(90, 0.8, 41.5, 19.5, 180);
+
                 //spawn speed
                 spawnSpeeds(9.5, 23);
                 spawnSpeeds(47, 16);
