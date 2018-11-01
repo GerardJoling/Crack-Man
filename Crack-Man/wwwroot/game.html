@@ -45,6 +45,7 @@
             var speed = 0.3;
             var move = 'stop';
             var pointss = 0;
+            var life = 150;
             var direction;
             var idle;
             var superspeed = false;
@@ -86,7 +87,7 @@
                         new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide }), //right side
                         new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide }) //left side
                     ];
-                
+
                 var skyboxMaterial = new THREE.MeshFaceMaterial(skyboxMaterials);
                 skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
                 skybox.position.y = 150;
@@ -313,7 +314,7 @@
 
             //things in here get updated
             function update() {
-
+                health.value = life;
                 score.value = pointss;
 
                 //shroom effect
@@ -391,7 +392,7 @@
                     }
                     if (map[82])//R to reset
                     {
-                        health.value = 150;
+                        life = 150;
                         reset();
                     }
                     if (map[32])//SPACEBAR to switch between cameras
@@ -630,7 +631,7 @@
 
             //lower hp when hit
             function gethit() {
-                health.value -= 20;
+                life -= 50;
             }
             //rotates items
             function rotate(a) {
@@ -646,7 +647,7 @@
             function animate() {
                 requestAnimationFrame(animate);
                 render();
-                if (health.value > 1) {
+                if (life > 1) {
                     update();
                 }
             }
@@ -725,12 +726,11 @@
     <script src="OrbitControls.js"></script>
     <script src="MTLLoader.js"></script>
     <script src="OBJLoader.js"></script>
-    <progress id="health" value="150" max="150"></progress>  <audio controls autoplay style="visibility:hidden"><source src="audio/music.mp3" type="audio/mpeg"></audio>
+
     <form action="end.php" method="post">
-        Name: <input type="text" name="name" value="Name"> Points: <input readonly type="number" name="score" value="0" id="score">
-        <br>
-        <input type="submit" value="Send Highscore">
+        Name: <input type="text" name="name" value="Name"> Points: <input readonly type="number" name="score" value="0" id="score"><input type="submit" value="Send Highscore">  <audio controls loop autoplay style="visibility:hidden; width: 10px; height:1px;"><source src="audio/music.mp3" type="audio/mpeg"></audio>
     </form>
+    Health: <progress readonly id="health" value="150" max="150"></progress>
 
 </body>
 </html>

@@ -15,52 +15,19 @@ if ($conn->connect_error) {
 } 
 ?>
     <div id="allthethings">
-        <div id="left"></div>
         <div id="title" onclick="location.href='index.html';"><h3>Crack-Man The Game</h3></div>
-        <div id="play" onclick="location.href='game.html';"><p>PLAY GAME</p></div>
-        <div id="options" onclick="location.href='highscores.php';"><p>HIGHSCORES</p></div>
-        <div id="credits" onclick="location.href='index.html';"><p>CREDITS</p></div>
-        <div id="right"></div>
-        <div id="exit" onclick="window.close();"></div>
-        <div id="circle"></div>
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
         <br />
         <?php
         $sql = "SELECT * FROM Highscores ORDER BY Score DESC LIMIT 10";
+		$i = 1;
         if($result = mysqli_query($conn, $sql)){
         if(mysqli_num_rows($result) > 0){
-        echo "<table>
-            ";
-            echo "
-            <tr>
-                ";
-                echo "
-                <th>Name</th>";
-                echo "
-                <th>Score</th>";
-                echo "
-            </tr>";
+		    echo '<div id="high"><h1>Highscores</h1></div>';
             while($row = mysqli_fetch_array($result)){
-            echo "
-            <tr>
-                ";
-                echo "
-                <td>" . $row['Name'] . "</td>";
-                echo "
-                <td>" . $row['Score'] . "</td>";
-                echo "
-            </tr>";
+			echo '<div id="score"><p>#' . $i . '    ' . $row['Score'] . ' ' . $row['Name'] . '</p></div>';
+			$i++;
             }
-            echo "
-        </table>";
+
         // Free result set
         mysqli_free_result($result);
         } else{
