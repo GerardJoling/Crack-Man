@@ -6,8 +6,7 @@
 </head>
 <body style="margin:0px;padding:0px;overflow:hidden;">
     <script>
-
-        function parseCommand(input = "") {
+function parseCommand(input = "") {
             return JSON.parse(input);
         }
 
@@ -42,17 +41,20 @@
             var tripbox;
             var skybox;
             var weedbox;
-            var speed = 0.3;
+            var speedModifier = 1;
+            var speed;
             var move = 'stop';
             var pointss = 0;
             var direction;
             var idle;
+            var sober = true;
             var superspeed = false;
             var supertrip = false;
             var superhigh = false;
-            var counter = 0;
-            var counter2 = 0;
-            var counter3 = 0;
+            var speedcounter = 0;
+            var shroomcounter = 0;
+            var weedcounter = 0;
+
             init();
             animate();
 
@@ -86,7 +88,7 @@
                         new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide }), //right side
                         new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide }) //left side
                     ];
-                
+
                 var skyboxMaterial = new THREE.MeshFaceMaterial(skyboxMaterials);
                 skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
                 skybox.position.y = 150;
@@ -109,6 +111,16 @@
                     new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/weed.jpg"), side: THREE.BackSide }), //bottom side
                     new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/weed.jpg"), side: THREE.BackSide }), //right side
                     new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/weed.jpg"), side: THREE.BackSide }) //left side
+                ];
+                //speed skybox
+                speedbox = [
+                    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/speed.jpg"), side: THREE.BackSide }), //front side
+                    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/speed.jpg"), side: THREE.BackSide }), //back side
+                    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/speed.jpg"), side: THREE.BackSide }), //top side
+                    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/speed.jpg"), side: THREE.BackSide }), //bottom side
+                    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/speed.jpg"), side: THREE.BackSide }), //right side
+                    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/speed.jpg"), side: THREE.BackSide }) //left side
+
                 ];
                 //soft white light
                 var light = new THREE.AmbientLight(0x404040);
@@ -240,7 +252,7 @@
                 //kolom 5
                 createWall(50, 0.8, 8, 9.5, 90);
                 createWall(50, 0.8, 24, 9.5, 90);
-                createWall(50, 0.8, 52, 9.5, 90);
+                createWall(50, 0.8, 51, 9.5, 90);
                 createWall(50, 0.8, 67, 9.5, 90);
 
                 //Horizontaal
@@ -315,56 +327,73 @@
             function update() {
 
                 score.value = pointss;
+                speed = (0.3*speedModifier);
+
+                //sober
+                if (sober == true) {
+                    weedcounter = 0;
+                    speedcounter = 0;
+                    shroomcounter = 0;
+                    superspeed = false;
+                    superhigh = false;
+                    supertrip = false;
+                    skybox.material = new THREE.MeshFaceMaterial(skyboxMaterials);
+                    speedModifier = 1;
+                    cmmodel.scale.set(0.08, 0.08, 0.08);
+                }
+
+                //speed effect
+                if (superspeed == true) {
+                    speedModifier = 2;
+                    speedcounter += 1;
+                    skybox.material = new THREE.MeshFaceMaterial(speedbox);
+                    skybox.rotation.y = skybox.rotation.y + 0.1;
+                    if (speedcounter == 200) {
+                        sober = true;
+                        speedcounter = 0;
+                    }
+                }
 
                 //shroom effect
                 if (supertrip == true) {
-                    counter2 += 1;
+                    speedModifier = 1;
+                    shroomcounter += 1;
                     skybox.material = new THREE.MeshFaceMaterial(tripbox);
                     skybox.rotation.y = skybox.rotation.y + 0.01;
                     cmmodel.scale.set(0.2, 0.2, 0.2);
-                    if (counter2 == 300) {
-                        supertrip = false;
-                        counter2 = 0;
-                        skybox.material = new THREE.MeshFaceMaterial(skyboxMaterials);
-                        cmmodel.scale.set(0.08, 0.08, 0.08);
+                    if (shroomcounter == 300) {
+                        shroomcounter = 0;
+                        sober = true;
+                        weedcounter = 0;
                     }
                 }
-                //speed effect
-                if (superspeed == true) {
-                    counter += 1;
-                    speed = 0.6;
-                    if (counter == 200) { superspeed = false; counter = 0; speed = 0.3; }
-                }
+
                 //weed effect
                 if (superhigh == true) {
-                    counter3 += 1;
+                    speedModifier = 0.7;
+                    weedcounter += 1;
                     skybox.material = new THREE.MeshFaceMaterial(weedbox);
-                    skybox.rotation.y = skybox.rotation.y + 0.01;
-                    if (counter3 == 200) {
-                        superhigh = false;
-                        counter3 = 0;
-                        skybox.material = new THREE.MeshFaceMaterial(skyboxMaterials);
+                    skybox.rotation.y = skybox.rotation.y + 0.0025;
+                    if (weedcounter == 300) {
+                        sober = true;
+                        weedcounter = 0;
                     }
                 }
+
+
                 //idle animations
-                if (cmmodel.position.y > 0.6) {
-                    if (superspeed == true) { idle = -0.15 } else { idle = -0.04; }
-                }
-                if (cmmodel.position.y < -0.1) {
-                    if (superspeed == true) { idle = 0.15 } else { idle = 0.04; }
-                }
-                cmmodel.position.y += idle;
+                cmmodel.position.y += (idle*speedModifier);
                 for (var i = 0; i < pills.length; i++) {
                     rotate(pills[i]);
                 }
                 for (var i = 0; i < speeds.length; i++) {
-                    speeds[i].rotation.z = speeds[i].rotation.z + 0.15;
+                    speeds[i].rotation.z = speeds[i].rotation.z + (0.15*speedModifier);
                 }
                 for (var i = 0; i < shrooms.length; i++) {
-                    shrooms[i].rotation.y = shrooms[i].rotation.y + 0.03;
+                    shrooms[i].rotation.y = shrooms[i].rotation.y + (0.03*speedModifier);
                 }
                 for (var i = 0; i < weeds.length; i++) {
-                    weeds[i].rotation.y = shrooms[i].rotation.y + 0.05;
+                    weeds[i].rotation.y = shrooms[i].rotation.y + (0.05*speedModifier);
                 }
 
                 //keyboard controls
@@ -445,7 +474,12 @@
                         {
                             collidableSpeedList[i].position.y = -1000;
                             speeds[i].position.y = -1000;
-                            if (superspeed == true) { counter = 0; }
+                            weedcounter = 300;
+                            shroomcounter = 300;
+                            speedcounter = 0;
+                            sober = false;
+                            superhigh = false;
+                            supertrip = false;
                             superspeed = true;
                         }
                     }
@@ -455,7 +489,12 @@
                         {
                             collidableShroomList[i].position.y = -1000;
                             shrooms[i].position.y = -1000;
-                            if (supertrip == true) { counter2 = 0; }
+                            weedcounter = 300;
+                            speedcounter = 200;
+                            shroomcounter = 0;
+                            sober = false;
+                            superspeed = false;
+                            superhigh = false;
                             supertrip = true;
                         }
                     }
@@ -465,7 +504,12 @@
                         {
                             collidableWeedList[i].position.y = -1000;
                             weeds[i].position.y = -1000;
-                            if (superhigh == true) { counter3 = 0; }
+                            shroomcounter = 300;
+                            speedcounter = 200;
+                            weedcounter = 0;
+                            sober = false;
+                            superspeed = false;
+                            supertrip = false;
                             superhigh = true;
                         }
                     }
@@ -659,6 +703,7 @@
 
             //reset crackman and the camera
             function reset() {
+                sober = true;
                 cmbox.position.set(46.5, 0.6, 7);
                 cmmodel.position.set(46.5, 0, 7);
                 cameratype = 2;
@@ -716,10 +761,7 @@
             exampleSocket.onmessage = function (event) {
                 var command = parseCommand(event.data);
             }
-        }
-
-
-    </script>
+        }</script>
     <script src="three.min.js"></script>
     <script src="three.js"></script>
     <script src="OrbitControls.js"></script>
