@@ -104,6 +104,15 @@ function parseCommand(input = "") {
                 skybox.position.y = 150;
                 scene.add(skybox);
 
+                //sober skybox
+                starbox = [
+                    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/stars.jpg"), side: THREE.BackSide }), //front side
+                    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/stars.jpg"), side: THREE.BackSide }), //back side
+                    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/stars.jpg"), side: THREE.BackSide }), //top side
+                    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/stars.jpg"), side: THREE.BackSide }), //bottom side
+                    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/stars.jpg"), side: THREE.BackSide }), //right side
+                    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/stars.jpg"), side: THREE.BackSide }) //left side
+                ];
                 //trippy skybox
                 tripbox = [
                     new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/trippy.jpg"), side: THREE.BackSide }), //front side
@@ -290,7 +299,7 @@ function parseCommand(input = "") {
                     superhigh = false;
                     supertrip = false;
                     speedModifier = 1;
-                    skybox.material = new THREE.MeshFaceMaterial(skyboxMaterials);
+                    skybox.material = new THREE.MeshFaceMaterial(starbox);
                     cmmodel.scale.set(0.08, 0.08, 0.08);
                 }
 
