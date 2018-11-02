@@ -43,6 +43,7 @@ function parseCommand(input = "") {
             var skybox;
             var weedbox;
             var speed;
+            var gspeed = 0.3;
             var speedModifier = 1;
             var move = 'stop';
             var pointss = 0;
@@ -330,11 +331,12 @@ function parseCommand(input = "") {
                 if (superhigh == true) {
                     weedcounter += 1;
                     speedModifier = 0.5;
+                    gspeed = 0.1
                     skybox.material = new THREE.MeshFaceMaterial(weedbox);
                     skybox.rotation.y = skybox.rotation.y + 0.0025;
                     cmmodel.scale.set(0.08, 0.08, 0.08);
                     if (weedcounter == 300) {
-                        sober = true;
+                        sober = true; gspeed = 0.3;
                     }
                 }
                 //idle animations
@@ -420,38 +422,38 @@ function parseCommand(input = "") {
                             else if (rndm <= 1 && rndm > 0.75) { gmove[i] = 'right'; }
 
                             if (collidableGhostList[i].rotation.y == (Math.PI / 180) * 0) { //w
-                                collidableGhostList[i].position.z -= speed;
+                                collidableGhostList[i].position.z -= gspeed;
 
                             }
                             else if (collidableGhostList[i].rotation.y == (Math.PI / 180) * 90) { //a
-                                collidableGhostList[i].position.x -= speed;
+                                collidableGhostList[i].position.x -= gspeed;
 
                             }
                             else if (collidableGhostList[i].rotation.y == (Math.PI / 180) * 180) { //s
-                                collidableGhostList[i].position.z += speed;
+                                collidableGhostList[i].position.z += gspeed;
 
                             }
                             else if (collidableGhostList[i].rotation.y == (Math.PI / 180) * 270) { //d
-                                collidableGhostList[i].position.x += speed;
+                                collidableGhostList[i].position.x += gspeed;
 
                             }
 
                         }
                     }
                     if (gmove[i] == 'up') {
-                        collidableGhostList[i].position.z += speed;
+                        collidableGhostList[i].position.z += gspeed;
                         collidableGhostList[i].rotation.y = (Math.PI / 180) * 0;
                     }
                     else if (gmove[i] == 'down') {
-                        collidableGhostList[i].position.z -= speed;
+                        collidableGhostList[i].position.z -= gspeed;
                         collidableGhostList[i].rotation.y = (Math.PI / 180) * 180;
                     }
                     else if (gmove[i] == 'left') {
-                        collidableGhostList[i].position.x += speed;
+                        collidableGhostList[i].position.x += gspeed;
                         collidableGhostList[i].rotation.y = (Math.PI / 180) * 90;
                     }
                     else if (gmove[i] == 'right') {
-                        collidableGhostList[i].position.x -= speed;
+                        collidableGhostList[i].position.x -= gspeed;
                         collidableGhostList[i].rotation.y = (Math.PI / 180) * 270;
                     }
 
