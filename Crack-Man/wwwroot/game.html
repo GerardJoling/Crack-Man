@@ -58,13 +58,7 @@ function parseCommand(input = "") {
             var shroomcounter = 0;
             var weedcounter = 0;
             var gmove = [];
-            gmove[0] = 'up';
-            gmove[1] = 'up';
-            gmove[2] = 'up';
-            gmove[3] = 'up';
-            gmove[4] = 'up';
-            gmove[5] = 'up';
-            gmove[6] = 'up';
+           
             init();
             animate();
 
@@ -86,7 +80,9 @@ function parseCommand(input = "") {
                 renderer.setSize(window.innerWidth, window.innerHeight + 5);
                 document.body.appendChild(renderer.domElement);
                 window.addEventListener('resize', onWindowResize, false);
-
+                for (var i = 0; i < 10; i++) {
+                    gmove[i] = 'up';
+                }
 
                 //generating skybox
                 var skyboxGeometry = new THREE.BoxGeometry(300, 300, 300);
@@ -397,15 +393,16 @@ function parseCommand(input = "") {
                 //weed effect
                 if (superhigh == true) {
                     weedcounter += 1;
-                    speedModifier = 0.5;
-                    gspeed = 0.1
+                    speedModifier = 0.4;
+                    gspeed = 0.04
                     skybox.material = new THREE.MeshFaceMaterial(weedbox);
                     skybox.rotation.y = skybox.rotation.y + 0.0025;
                     cmmodel.scale.set(0.08, 0.08, 0.08);
                     if (weedcounter == 300) {
-                        sober = true; gspeed = 0.3;
+                        sober = true;
                     }
                 }
+                else { gspeed = 0.3;}
                 //idle animations
                 if (cmmodel.position.y > 0.6) {
                     idle = (-0.04*speedModifier);
@@ -851,7 +848,14 @@ function parseCommand(input = "") {
                     collidableWeedList[i].position.y = 2;
                     weeds[i].position.y = 0.15;
                 }
-
+                collidableGhostList[0].position.set(9.5, 2, 23);
+                collidableGhostList[1].position.set(47, 2, 16);
+                collidableGhostList[2].position.set(84, 2, 7);
+                collidableGhostList[3].position.set(40, 2, 59);
+                collidableGhostList[4].position.set(17, 2, 69);
+                collidableGhostList[5].position.set(70, 2, 54);
+                collidableGhostList[6].position.set(70, 2, 37);
+              
             }
             //switches between cameras
             function cameras() {
