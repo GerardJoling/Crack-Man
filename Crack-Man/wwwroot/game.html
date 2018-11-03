@@ -161,29 +161,98 @@ function parseCommand(input = "") {
                 spawnGhost(70, 54);
                 spawnGhost(70, 37);
 
-                //spawn basic pills
-                spawnPills(2, 7, 'h', 19);
-                spawnPills(2, 11, 'h', 19);
-                spawnPills(2, 15, 'h', 19);
-                spawnPills(1.9, 19, 'h', 19)
-                spawnPills(2, 23, 'h', 19);
-                spawnPills(2, 27, 'h', 19);
-                spawnPills(30, 30, 'h', 10);
-                spawnPills(1, 33, 'h', 19);
-                spawnPills(1, 37, 'h', 6);
-                spawnPills(70, 37, 'h', 6);
 
-                spawnPills(2, 68, 'h', 19);
-                spawnPills(2, 64, 'h', 19);
-                spawnPills(2, 60, 'h', 19);
-                spawnPills(1.9, 56, 'h', 19)
-                spawnPills(2, 52, 'h', 19);
-                spawnPills(2, 48, 'h', 19);
-                spawnPills(30, 44, 'h', 10);
-                spawnPills(1, 41, 'h', 19);
+                //spawn basic pills (x, z, direction, amount, distance)
 
-                //spawn walls  x, y, z, length, angle
-                //vertikaal
+                //kolom 1 & 9
+                spawnPills(92.6, 7, 'v', 1, 4.85);
+                spawnPills(92.6, 14.5, 'v', 1, 4.85);
+                spawnPills(92.6, 50.5, 'v', 1, 4.85);
+                spawnPills(92.6, 59, 'v', 1, 4.85);
+
+                spawnPills(7, 7, 'v', 1, 4.85);
+                spawnPills(7, 14.5, 'v', 1, 4.85);
+                spawnPills(7, 50.5, 'v', 1, 4.85);
+                spawnPills(7, 59, 'v', 1, 4.85);
+
+                //kolom 2 & 8
+                spawnPills(78.3, 7, 'v', 1, 4.85);
+                spawnPills(78.3, 14.5, 'v', 1, 4.85);
+                spawnPills(78.3, 22.5, 'v', 2, 4.85);
+                spawnPills(78.3, 36, 'v', 2, 4.85);
+                spawnPills(78.3, 50.5, 'v', 1, 4.85);
+                spawnPills(78.3, 59, 'v', 1, 4.85);
+
+                spawnPills(21.3, 7, 'v', 1, 4.85);
+                spawnPills(21.3, 14.5, 'v', 1, 4.85);
+                spawnPills(21.3, 23.5, 'v', 2, 4.85);
+                spawnPills(21.3, 36, 'v', 2, 4.85);
+                spawnPills(21.3, 50.5, 'v', 1, 4.85);
+                spawnPills(21.3, 59, 'v', 1, 4.85);
+
+                //kolom 3 & 7
+                spawnPills(70.5, 14.5, 'v', 1, 4.85);
+                spawnPills(70.5, 29, 'v', 1, 4.85);
+                spawnPills(70.5, 36, 'v', 1, 4.85);
+                spawnPills(70.5, 50.5, 'v', 1, 4.85);
+
+                //spawnPills(29.6, 14.5, 'v', 1, 4.85);
+                spawnPills(29.6, 29, 'v', 1, 4.85);
+                spawnPills(29.6, 36, 'v', 1, 4.85);
+                spawnPills(29.6, 50.5, 'v', 1, 4.85);
+
+                //kolom 4 & 6
+                spawnPills(54.2, 7, 'v', 1, 4.85);
+                spawnPills(54.2, 22.5, 'v', 1, 4.85);
+                spawnPills(54.2, 43, 'v', 1, 4.85);
+                spawnPills(54.2, 59, 'v', 1, 4.85);
+
+                spawnPills(46, 7, 'v', 1, 4.85);
+                spawnPills(46, 22.5, 'v', 1, 4.85);
+                spawnPills(46, 43, 'v', 1, 4.85);
+                spawnPills(46, 59, 'v', 1, 4.85);
+
+                //rij 1 & 9
+                spawnPills(2, 7, 'h', 8, 4.85);
+                spawnPills(49, 7, 'h', 9, 4.85);
+
+                spawnPills(2, 68, 'h', 9, 4.85);
+                spawnPills(49, 68, 'h', 9, 4.85);
+
+                //rij 2 & 8
+                spawnPills(2, 15.8, 'h', 9, 4.85);
+                spawnPills(49, 15.8, 'h', 9, 4.85);
+
+                spawnPills(2, 59.4, 'h', 9, 4.85);
+                spawnPills(49, 59.4, 'h', 9, 4.85);
+
+                //rij 3 & 7
+                spawnPills(2, 24.1, 'h', 4, 4.85);
+                spawnPills(24.4, 24.1, 'h', 4, 5.4);
+                spawnPills(49, 24.1, 'h', 4, 5.4);
+                spawnPills(73.5, 24.1, 'h', 4, 4.85);
+
+                spawnPills(2, 51.1, 'h', 4, 4.85);
+                spawnPills(24.4, 51.1, 'h', 4, 5.4);
+                spawnPills(49, 51.1, 'h', 4, 5.4);
+                spawnPills(73.5, 51.1, 'h', 4, 4.85);
+
+                //rij 4 & 6
+                spawnPills(24.4, 30, 'h', 4, 5.4);
+                spawnPills(49, 30, 'h', 4, 5.4);
+
+                spawnPills(24.4, 44, 'h', 4, 5.4);
+                spawnPills(49, 44, 'h', 4, 5.4);
+
+                //rij 5
+                spawnPills(2, 38, 'h', 4, 4.85);
+                spawnPills(21.3, 38, 'h', 2, 4.2);
+                spawnPills(31.1, 38, 'h', 7, 4.7);
+                spawnPills(65.9, 38, 'h', 2, 4.2);
+                spawnPills(73.5, 38, 'h', 4, 4.85);
+
+
+                //spawn walls (x, y, z, length, angle)
 
                 //kolom 1 & 9
                 createWall(3, 0.8, 14.5, 26.5, 90);
@@ -216,8 +285,6 @@ function parseCommand(input = "") {
                 createWall(50, 0.8, 24, 9.5, 90);
                 createWall(50, 0.8, 51, 9.5, 90);
                 createWall(50, 0.8, 67, 9.5, 90);
-
-                //Horizontaal
 
                 //rij 1 & 10
                 createWall(50, 0.8, 3, 96, 180);
@@ -267,7 +334,7 @@ function parseCommand(input = "") {
 
                 //spawn speed
                 spawnSpeeds(9.5, 23);
-                spawnSpeeds(47, 16);
+                spawnSpeeds(50, 16);
                 spawnSpeeds(84, 7);
                 spawnSpeeds(40, 59);
                 spawnSpeeds(17, 69);
@@ -597,7 +664,7 @@ function parseCommand(input = "") {
             //generates a wall
             function createWall(setx, sety, setz, length, rotation) {
                 var wallGeometry = new THREE.CubeGeometry(length, 1.5, 3.5, 1, 1, 1);
-                var wallMaterial = new THREE.MeshBasicMaterial({ color: 0x003366 });
+                var wallMaterial = new THREE.MeshBasicMaterial({ color: 0x003366}); //, transparent: true, opacity: 0.5
                 var wall = new THREE.Mesh(wallGeometry, wallMaterial);
                 wall.position.set(setx, sety, setz);
                 wall.rotation.y = ((Math.PI / 180) * rotation);
@@ -606,26 +673,26 @@ function parseCommand(input = "") {
             }
 
             //generate standard pills
-            function spawnPills(setx, setz, direction, amount) {
+            function spawnPills(setx, setz, direction, amount, distance) {
                 for (var i = 0; i < amount; i++) {
                     loadOBJModel("models/", "pill.obj", "models/", "pill.mtl", (mesh) => {
                         pills.push(mesh);
                         mesh.scale.set(.006, .006, .006);
                         scene.add(mesh);
                         if (direction == 'h') {
-                            setx += 4.8;
+                            setx += distance;
                             mesh.position.x = setx;
                             mesh.position.y = 0.6;
                             mesh.position.z = setz;
                         }
                         if (direction == 'v') {
-                            setz += 5;
+                            setz += distance;
                             mesh.position.x = setx;
                             mesh.position.y = 0.6;
                             mesh.position.z = setz;
                         }
                         var pillcGeometry = new THREE.CubeGeometry(2.2, 2, 2.2, 1, 1, 1);
-                        var pillcMaterial = new THREE.MeshBasicMaterial({ color: 0x003366, transparent: true, opacity: 0.5 });
+                        var pillcMaterial = new THREE.MeshBasicMaterial({ color: 0x003366, transparent: true, opacity: 0 });
                         var pillc = new THREE.Mesh(pillcGeometry, pillcMaterial);
                         pillc.position.x = mesh.position.x;
                         pillc.position.y = mesh.position.y;
@@ -708,7 +775,7 @@ function parseCommand(input = "") {
 
                 //CRACKMAN HITBOX
                 var cubeGeometry = new THREE.CubeGeometry(2.5, 3, 2.5, 1, 1, 1);
-                var wireMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, transparent: true, opacity: 0.5 });
+                var wireMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, transparent: true, opacity: 0 });
                 cmbox = new THREE.Mesh(cubeGeometry, wireMaterial);
                 cmbox.position.set(setx, 0.6, setz);
                 scene.add(cmbox);
