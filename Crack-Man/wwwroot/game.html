@@ -566,7 +566,7 @@
                         var pillCollisionResults = ray.intersectObject(collidablePillList[i]);
                         if (pillCollisionResults.length > 0 && pillCollisionResults[0].distance < directionVector.length()) //collision detected with pill
                         {
-                            pointss = pointss + 10;
+                            if (collidablePillList[i].position.y != -1000) { pointss = pointss + 10; }
                             collidablePillList[i].position.y = -1000;
                             pills[i].position.y = -1000;
                         }
@@ -709,7 +709,7 @@
                             mesh.position.y = 0.6;
                             mesh.position.z = setz;
                         }
-                        var pillcGeometry = new THREE.CubeGeometry(2.2, 2, 2.2, 1, 1, 1);
+                        var pillcGeometry = new THREE.CubeGeometry(4, 2, 4, 1, 1, 1);
                         var pillcMaterial = new THREE.MeshBasicMaterial({ color: 0x003366, transparent: true, opacity: 0 });
                         var pillc = new THREE.Mesh(pillcGeometry, pillcMaterial);
                         pillc.position.x = mesh.position.x;
@@ -792,7 +792,7 @@
                 });
 
                 //CRACKMAN HITBOX
-                var cubeGeometry = new THREE.CubeGeometry(2.5, 3, 2.5, 1, 1, 1);
+                var cubeGeometry = new THREE.CubeGeometry(2, 3, 2, 1, 1, 1);
                 var wireMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, transparent: true, opacity: 0 });
                 cmbox = new THREE.Mesh(cubeGeometry, wireMaterial);
                 cmbox.position.set(setx, 0.6, setz);
@@ -808,7 +808,7 @@
                     ghosts.push(mesh);
                 });
                 //ghost HITBOX
-                var cubeGeometry = new THREE.CubeGeometry(2.5, 3, 2.5, 1, 1, 1);
+                var cubeGeometry = new THREE.CubeGeometry(3, 3, 3, 1, 1, 1);
                 var wireMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, transparent: true, opacity: 0 });
                 var gbox = new THREE.Mesh(cubeGeometry, wireMaterial);
                 gbox.position.set(setx, 2, setz);
@@ -818,7 +818,7 @@
 
             //lower hp when hit
             function gethit() {
-                life = life - 50;
+                life = life - 10;
             }
             //rotates items
             function rotate(a) {
