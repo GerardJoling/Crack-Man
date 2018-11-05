@@ -24,7 +24,7 @@ if ($conn->connect_error) {
         if(mysqli_num_rows($result) > 0){
 		    echo '<div id="high"><h1>Highscores</h1></div>';
             while($row = mysqli_fetch_array($result)){
-			echo '<div id="score"><p>#' . $i . '    ' . $row['Score'] . ' ' . $row['Name'] . '</p></div>';
+			echo '<div id="score"><p>#' . $i . '    ' . $row['Score'] . ' Points ' . $row['Name'] . ' ' . $row['Time'] . ' Seconds</p></div>';
 			$i++;
             }
 

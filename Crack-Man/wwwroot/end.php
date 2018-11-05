@@ -13,9 +13,10 @@ if ($conn->connect_error) {
 
 $Name = $_POST['name'];
 $Score = $_POST['score'];
+$Time = $_POST['time'];
 
-$sql = "INSERT INTO Highscores (Name, Score)
-VALUES ('$Name', '$Score')";
+$sql = "INSERT INTO Highscores (Name, Score, Time)
+VALUES ('$Name', '$Score', '$Time')";
 
 if ($conn->query($sql) === TRUE) {
 } else {

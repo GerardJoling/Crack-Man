@@ -5,8 +5,9 @@
     <title>Crack-Man</title>
 </head>
 <body style="margin:0px;padding:0px;overflow:hidden;">
+    <audio controls loop autoplay style="visibility:hidden; width: 10px; height:1px;"><source src="audio/music.mp3" type="audio/mpeg"></audio>
     <script>
-function parseCommand(input = "") {
+        function parseCommand(input = "") {
             return JSON.parse(input);
         }
 
@@ -16,8 +17,10 @@ function parseCommand(input = "") {
 
 
             //variables
+            var time = 0;
             let score = document.getElementById("score");
             let health = document.getElementById("health");
+            let timer = document.getElementById("time");
             var worldObjects = {};
             var camera, scene, renderer;
             var cameraControls;
@@ -58,7 +61,7 @@ function parseCommand(input = "") {
             var shroomcounter = 0;
             var weedcounter = 0;
             var gmove = [];
-           
+
             init();
             animate();
 
@@ -345,14 +348,33 @@ function parseCommand(input = "") {
                 spawnWeeds(28, 20);
                 spawnWeeds(15, 60);
                 spawnWeeds(90, 15);
+
+                //timer
+                setInterval(incrementSeconds, 1000);
             }
 
+            //count time
+            function incrementSeconds() {
+                time += 1;
+            }
+
+            //post
+            function post() {
+                form = document.forms[0]
+                form.submit();
+            }
 
             //things in here get updated
             function update() {
                 health.value = life;
                 score.value = pointss;
-                speed = (0.3*speedModifier);
+                timer.value = time;
+                speed = (0.3 * speedModifier);
+
+                //death
+                if (life < 51) {
+                    setTimeout(post, 3000)
+                }
 
                 //sober
                 if (sober == true) {
@@ -402,26 +424,26 @@ function parseCommand(input = "") {
                         sober = true;
                     }
                 }
-                else { gspeed = 0.3;}
+                else { gspeed = 0.3; }
                 //idle animations
                 if (cmmodel.position.y > 0.6) {
-                    idle = (-0.04*speedModifier);
+                    idle = (-0.04 * speedModifier);
                 }
                 if (cmmodel.position.y < -0.1) {
-                    idle = (0.04*speedModifier);
+                    idle = (0.04 * speedModifier);
                 }
-                cmmodel.position.y += (idle*speedModifier);
+                cmmodel.position.y += (idle * speedModifier);
                 for (var i = 0; i < pills.length; i++) {
                     rotate(pills[i]);
                 }
                 for (var i = 0; i < speeds.length; i++) {
-                    speeds[i].rotation.z = speeds[i].rotation.z + (0.15*speedModifier);
+                    speeds[i].rotation.z = speeds[i].rotation.z + (0.15 * speedModifier);
                 }
                 for (var i = 0; i < shrooms.length; i++) {
-                    shrooms[i].rotation.y = shrooms[i].rotation.y + (0.03*speedModifier);
+                    shrooms[i].rotation.y = shrooms[i].rotation.y + (0.03 * speedModifier);
                 }
                 for (var i = 0; i < weeds.length; i++) {
-                    weeds[i].rotation.y = shrooms[i].rotation.y + (0.05*speedModifier);
+                    weeds[i].rotation.y = shrooms[i].rotation.y + (0.05 * speedModifier);
                 }
 
                 //keyboard controls
@@ -655,13 +677,12 @@ function parseCommand(input = "") {
                 cmmodel.position.z = cmbox.position.z;
                 cmmodel.rotation.y = cmbox.rotation.y;
 
-
             }
 
             //generates a wall
             function createWall(setx, sety, setz, length, rotation) {
                 var wallGeometry = new THREE.CubeGeometry(length, 1.5, 3.5, 1, 1, 1);
-                var wallMaterial = new THREE.MeshBasicMaterial({ color: 0x003366}); //, transparent: true, opacity: 0.5
+                var wallMaterial = new THREE.MeshBasicMaterial({ color: 0x003366 }); //, transparent: true, opacity: 0.5
                 var wall = new THREE.Mesh(wallGeometry, wallMaterial);
                 wall.position.set(setx, sety, setz);
                 wall.rotation.y = ((Math.PI / 180) * rotation);
@@ -797,7 +818,7 @@ function parseCommand(input = "") {
 
             //lower hp when hit
             function gethit() {
-                life -= 10;
+                life = life - 50;
             }
             //rotates items
             function rotate(a) {
@@ -813,7 +834,7 @@ function parseCommand(input = "") {
             function animate() {
                 requestAnimationFrame(animate);
                 render();
-                if (life > 1) {
+                if (life > -1) {
                     update();
                 }
             }
@@ -855,7 +876,7 @@ function parseCommand(input = "") {
                 collidableGhostList[4].position.set(17, 2, 69);
                 collidableGhostList[5].position.set(70, 2, 54);
                 collidableGhostList[6].position.set(70, 2, 37);
-              
+
             }
             //switches between cameras
             function cameras() {
@@ -898,9 +919,8 @@ function parseCommand(input = "") {
     <script src="OBJLoader.js"></script>
 
     <form action="end.php" method="post">
-        Name: <input type="text" name="name" value="Name"> Points: <input readonly type="number" name="score" value="0" id="score"><input type="submit" value="Send Highscore">  <audio controls loop autoplay style="visibility:hidden; width: 10px; height:1px;"><source src="audio/music.mp3" type="audio/mpeg"></audio>
+        Name: <input type="text" name="name" value="Name"> Points: <input readonly type="number" name="score" value="0" id="score"> Time: <input readonly type="number" name="time" value="0" id="time">
     </form>
     Health: <progress readonly id="health" value="150" max="150"></progress>
-
 </body>
 </html>
