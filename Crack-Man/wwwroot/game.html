@@ -3,8 +3,20 @@
 <head>
     <meta charset="UTF-8" />
     <title>Crack-Man</title>
+    <link rel="stylesheet" type="text/css" href="css/ingame.css">
 </head>
 <body style="margin:0px;padding:0px;overflow:hidden;">
+
+    <div class="hud-top">
+        <img src="imgs/hud_ingame_top_bar.png" />
+        <img class="hud-health-bar-bottom-layer" src="imgs/hud_health_bar_bottom_layer.png" />
+        <span class="hud-text hud-score-text" id="scoreText">0</span>
+        <span class="hud-text hud-timer-text" id="timerText">0</span>
+        <img class="hud-health-bar-full" src="imgs/hud_health_bar_full.png" id="health" />
+        <span class="hud-text hud-health-bar-text" id="healthText">Health: 150/150</span>
+        <img class="hud-health-section" src="imgs/hud_ingame_health_section.png" />
+    </div>
+
     <script>
         function parseCommand(input = "") {
             return JSON.parse(input);
@@ -17,9 +29,10 @@
 
             //variables
             var time = 0;
-            let score = document.getElementById("score");
-            let health = document.getElementById("health");
-            let timer = document.getElementById("time");
+            let score = document.getElementById("scoreText");
+            let healthBar = document.getElementById("health");
+            let healthText = document.getElementById("healthText");
+            let timer = document.getElementById("timerText");
             var worldObjects = {};
             var camera, scene, renderer;
             var cameraControls;
@@ -183,9 +196,18 @@
 
             //things in here get updated
             function update() {
+
+                // UI Health
+                healthBar.style.width = ((life / 150) * 200) + "px";
+                healthText.innerHTML = "Health: " + life;
                 health.value = life;
-                score.value = pointss;
-                timer.value = time;
+
+                // UI Points
+                score.innerHTML = pointss;
+                
+                // UI Timer
+                timer.innerHTML = time;
+
                 speed = (0.3 * speedModifier);
 
                 //death

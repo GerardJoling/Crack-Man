@@ -1,0 +1,52 @@
+﻿.hud-top {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+}
+
+.hud-health-section {
+    position: absolute;
+    top: 30px;
+    right: 127px;
+}
+
+.hud-health-bar-bottom-layer {
+    position: absolute;
+    right: 133px;
+    top: 35px;
+}
+
+.hud-health-bar-full {
+    position: fixed;
+    left: 394px;
+    top: 40px;
+    width: 200px;
+    height: 20px;
+}
+
+.hud-text {
+    position: fixed;
+    font-weight: 600;
+    text-align: center;
+    font-size: 15px;
+    color: #fcd393;
+}
+
+.hud-health-bar-text {
+    left: 396px;
+    top: 42px;
+    padding-left: 63px;
+    padding-right: 63px;
+}
+
+.hud-score-text {
+    top: 39px;
+    left: 80px;
+    font-size: 20px !important;
+}
+
+.hud-timer-text {
+    top: 39px;
+    left: 238px;
+    font-size: 20px !important;
+}
