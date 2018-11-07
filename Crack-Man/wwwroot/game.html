@@ -952,9 +952,8 @@
     <script src="MTLLoader.js"></script>
     <script src="OBJLoader.js"></script>
 
-    <form action="end.php" method="post">
-        Points: <input readonly type="number" name="score" value="0" id="score"> Time: <input readonly type="number" name="time" value="0" id="time"><audio controls loop autoplay style="visibility:hidden; width: 10px; height:1px;"><source src="audio/music.mp3" type="audio/mpeg"></audio><input type="text" name="name" value="Name" style="visibility:hidden; width: 0px;"> 
+    <form action="end.php" method="post" style="visibility:hidden; width:0px; height:0px;">
+       <input readonly type="number" name="score" value="0" id="score" style="visibility:hidden; width:0px; height:0px;"><input readonly type="number" name="time" value="0" id="time" style="visibility:hidden; width:0px; height:0px;"><audio controls loop autoplay style="visibility:hidden; width: 10px; height:0px;"><source src="audio/music.mp3" type="audio/mpeg"></audio><input type="text" name="name" value="Name" style="visibility:hidden; width: 0px; height:0px;"> 
     </form>
-    Health: <progress readonly id="health" value="150" max="150"></progress>
 </body>
 </html>
